@@ -71,23 +71,19 @@ def registrar_pilotos():
 def registrar_carreras():
     carreras_api = api_carreras.obtener_carreras()
     carreras = []
-    for carrera_api in carreras_api:
-        # Extraer información de la carrera
-        nombre = carrera_api['name']
-        numero = carrera_api['round']
-        fecha = carrera_api['date']
-        circuito_api = carrera_api['circuit']["circuitId"]
-        circuito = Circuito(circuito_api['name'], circuito_api['location']['country'], circuito_api['location']['locality'], circuito_api['location']['lat'], circuito_api['location']['long'])
-        podium = []
-        carrera = Carrera(nombre, numero, fecha, circuito, podium)
-        carreras.append(carrera)
-    
-    
-
-    with open("carreras.txt", 'w') as f:
-        for carrera in carreras:
-            f.write(f"[{carrera.nombre},{carrera.numero},{carrera.fecha},{carrera.circuito.nombre},{carrera.circuito.pais},{carrera.circuito.localidad},{carrera.circuito.latitud},{carrera.circuito.longitud}]\n")
-
+    with open("carreras.txt", "w") as archivo:
+        for carrera_api in carreras_api:
+            # Extraer información de la carrera
+            nombre = carrera_api['name']
+            numero = carrera_api['round']
+            fecha = carrera_api['date']
+            circuito_api = carrera_api['circuit']
+            circuito = Circuito(circuito_api['name'], circuito_api['location']['country'], circuito_api['location']['locality'], circuito_api['location']['lat'], circuito_api['location']['long'])
+            podium = []
+            carrera = Carrera(nombre, numero, fecha, circuito, podium)
+            carreras.append(carrera)
+            # Escribir los datos de la carrera en el archivo
+            archivo.write(f"{carrera.nombre}, {carrera.numero}, {carrera.fecha}, {carrera.circuito.nombre}, {carrera.circuito.pais}, {carrera.circuito.localidad}, {carrera.circuito.latitud}, {carrera.circuito.longitud}\n")
     return carreras
 
 
