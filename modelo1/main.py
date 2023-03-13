@@ -1,12 +1,14 @@
+
+#Llamando clases de apis
 from apis.ApiCarreras import ApiCarreras
 from apis.ApiConstructores import ApiConstructores
 from apis.ApiPilotos import ApiPilotos
-
+#Llamando a las clases del proyecto
 from clases.Carrera import Carrera
 from clases.Circuito import Circuito
 from clases.Constructor import Constructor
 from clases.Piloto import Piloto
-import requests
+
 
 # Crear instancias de las APIs
 api_constructores = ApiConstructores('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/constructors.json')
@@ -27,17 +29,22 @@ circuitos = []
 
 # Función para registrar constructores
 def registrar_constructores():
+    
+    
+    
     constructores_api = api_constructores.obtener_constructores()
+    pilotos_api = api_pilotos.obtener_pilotos()
     
     for constructor_api in constructores_api:
+        team=[i["id"] for i in pilotos_api if constructor_api["id"]==i["team"]]
         
         
-        constructor = Constructor(constructor_api['id'], constructor_api['name'], constructor_api['nationality'])
+        constructor = Constructor(constructor_api['id'], constructor_api['name'], constructor_api['nationality'],team)
         constructores.append(constructor)
     with open('constructor.txt', 'w') as archivo:
         # Escribir la información de cada piloto en el archivo
         for constructor in constructores:
-            archivo.write(f" [ {constructor.nombre},{constructor.id},{constructor.nacionalidad},] \n")
+            archivo.write(f" [ {constructor.nombre},{constructor.id},{constructor.nacionalidad}, {constructor.pilotos_ref} ] \n")
 
 # Función para registrar pilotos
 def registrar_pilotos():
