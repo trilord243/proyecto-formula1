@@ -1,23 +1,23 @@
-Bahrain Grand Prix, 1, 2023-03-05, Bahrain International Circuit, Bahrain, Sakhir, 26.0325, 50.5106
-Saudi Arabian Grand Prix, 2, 2023-03-19, Jeddah Corniche Circuit, Saudi Arabia, Jeddah, 21.6319, 39.1044
-Australian Grand Prix, 3, 2023-04-02, Albert Park Grand Prix Circuit, Australia, Melbourne, -37.8497, 144.968
-Azerbaijan Grand Prix, 4, 2023-04-30, Baku City Circuit, Azerbaijan, Baku, 40.3725, 49.8533
-Miami Grand Prix, 5, 2023-05-07, Miami International Autodrome, USA, Miami, 25.9581, -80.2389
-Emilia Romagna Grand Prix, 6, 2023-05-21, Autodromo Enzo e Dino Ferrari, Italy, Imola, 44.3439, 11.7167
-Monaco Grand Prix, 7, 2023-05-28, Circuit de Monaco, Monaco, Monte-Carlo, 43.7347, 7.42056
-Spanish Grand Prix, 8, 2023-06-04, Circuit de Barcelona-Catalunya, Spain, Montmeló, 41.57, 2.26111
-Canadian Grand Prix, 9, 2023-06-18, Circuit Gilles Villeneuve, Canada, Montreal, 45.5, -73.5228
-Austrian Grand Prix, 10, 2023-07-02, Red Bull Ring, Austria, Spielberg, 47.2197, 14.7647
-British Grand Prix, 11, 2023-07-09, Silverstone Circuit, UK, Silverstone, 52.0786, -1.01694
-Hungarian Grand Prix, 12, 2023-07-23, Hungaroring, Hungary, Budapest, 47.5789, 19.2486
-Belgian Grand Prix, 13, 2023-07-30, Circuit de Spa-Francorchamps, Belgium, Spa, 50.4372, 5.97139
-Dutch Grand Prix, 14, 2023-08-27, Circuit Park Zandvoort, Netherlands, Zandvoort, 52.3888, 4.54092
-Italian Grand Prix, 15, 2023-09-03, Autodromo Nazionale di Monza, Italy, Monza, 45.6156, 9.28111
-Singapore Grand Prix, 16, 2023-09-17, Marina Bay Street Circuit, Singapore, Marina Bay, 1.2914, 103.864
-Japanese Grand Prix, 17, 2023-09-24, Suzuka Circuit, Japan, Suzuka, 34.8431, 136.541
-Qatar Grand Prix, 18, 2023-10-08, Losail International Circuit, Qatar, Al Daayen, 25.49, 51.4542
-United States Grand Prix, 19, 2023-10-22, Circuit of the Americas, USA, Austin, 30.1328, -97.6411
-Mexico City Grand Prix, 20, 2023-10-29, Autódromo Hermanos Rodríguez, Mexico, Mexico City, 19.4042, -99.0907
-São Paulo Grand Prix, 21, 2023-11-05, Autódromo José Carlos Pace, Brazil, São Paulo, -23.7036, -46.6997
-Las Vegas Grand Prix, 22, 2023-11-19, Las Vegas Strip Street Circuit, United States, Las Vegas, 36.1147, -115.173
-Abu Dhabi Grand Prix, 23, 2023-11-26, Yas Marina Circuit, UAE, Abu Dhabi, 24.4672, 54.6031
+Bahrain Grand Prix,1,2023-03-05,bahrain
+Saudi Arabian Grand Prix,2,2023-03-19,jeddah
+Australian Grand Prix,3,2023-04-02,albert_park
+Azerbaijan Grand Prix,4,2023-04-30,baku
+Miami Grand Prix,5,2023-05-07,miami
+Emilia Romagna Grand Prix,6,2023-05-21,imola
+Monaco Grand Prix,7,2023-05-28,monaco
+Spanish Grand Prix,8,2023-06-04,catalunya
+Canadian Grand Prix,9,2023-06-18,villeneuve
+Austrian Grand Prix,10,2023-07-02,red_bull_ring
+British Grand Prix,11,2023-07-09,silverstone
+Hungarian Grand Prix,12,2023-07-23,hungaroring
+Belgian Grand Prix,13,2023-07-30,spa
+Dutch Grand Prix,14,2023-08-27,zandvoort
+Italian Grand Prix,15,2023-09-03,monza
+Singapore Grand Prix,16,2023-09-17,marina_bay
+Japanese Grand Prix,17,2023-09-24,suzuka
+Qatar Grand Prix,18,2023-10-08,losail
+United States Grand Prix,19,2023-10-22,americas
+Mexico City Grand Prix,20,2023-10-29,rodriguez
+São Paulo Grand Prix,21,2023-11-05,interlagos
+Las Vegas Grand Prix,22,2023-11-19,vegas
+Abu Dhabi Grand Prix,23,2023-11-26,yas_marina

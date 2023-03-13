@@ -10,7 +10,7 @@ from clases.Constructor import Constructor
 from clases.Piloto import Piloto
 
 
-# Crear instancias de las APIs
+# Crear instancias de las APIs con sus respectivas clases y endpoints
 api_constructores = ApiConstructores('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/constructors.json')
 api_pilotos = ApiPilotos('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/drivers.json')
 api_carreras = ApiCarreras('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json')
@@ -34,23 +34,40 @@ def registrar_constructores():
     
     constructores_api = api_constructores.obtener_constructores()
     pilotos_api = api_pilotos.obtener_pilotos()
-    
+    #Recorriendo el arreglo de constructores
     for constructor_api in constructores_api:
+        #extraer los datos de los constructores
+        id_constructor = constructor_api["id"]
+        name=constructor_api["name"]
+        nationality=constructor_api["nationality"]
+        
+        #Recorriendo los pilotos para saber la referencia de los pilotos en constructores 
         team=[i["id"] for i in pilotos_api if constructor_api["id"]==i["team"]]
-        
-        
-        constructor = Constructor(constructor_api['id'], constructor_api['name'], constructor_api['nationality'],team)
+        #asignar los datos a la lista de constructores
+        constructor = Constructor(id_constructor,name,nationality,team)
         constructores.append(constructor)
+        
+        
+        #abir el archivo de texto de modo escritura
     with open('constructor.txt', 'w') as archivo:
         # Escribir la información de cada piloto en el archivo
         for constructor in constructores:
-            archivo.write(f" [ {constructor.nombre},{constructor.id},{constructor.nacionalidad}, {constructor.pilotos_ref} ] \n")
+            archivo.write(f"{constructor.nombre},{constructor.id},{constructor.nacionalidad}, {constructor.pilotos_ref} \n")
 
 # Función para registrar pilotos
 def registrar_pilotos():
     pilotos_api = api_pilotos.obtener_pilotos()
+    #Recorriendo el arreglo de pilotos
     for piloto_api in pilotos_api:
-        piloto = Piloto(piloto_api['firstName'], piloto_api['lastName'], piloto_api['dateOfBirth'], piloto_api['nationality'], piloto_api['permanentNumber'])
+        #Extraer informacion del piloto
+        firstName=piloto_api['firstName']
+        lastName=piloto_api['lastName']
+        dateOfBirth=piloto_api['dateOfBirth']
+        nationality=piloto_api['nationality']
+        permanentNumber=piloto_api['permanentNumber']
+        
+        #Asignandole valores a los atributos
+        piloto = Piloto(firstName, lastName, dateOfBirth, nationality, permanentNumber)
         pilotos.append(piloto)
     
     # Abrir el archivo de texto en modo escritura
@@ -84,13 +101,11 @@ def registrar_carreras():
             nombre = carrera_api['name']
             numero = carrera_api['round']
             fecha = carrera_api['date']
-            circuito_api = carrera_api['circuit']
-            circuito = Circuito(circuito_api['name'], circuito_api['location']['country'], circuito_api['location']['locality'], circuito_api['location']['lat'], circuito_api['location']['long'])
-            podium = []
-            carrera = Carrera(nombre, numero, fecha, circuito, podium)
+            id_carrera=carrera_api['circuit']["circuitId"]
+            carrera = Carrera(nombre, numero, fecha,id_carrera)
             carreras.append(carrera)
             # Escribir los datos de la carrera en el archivo
-            archivo.write(f"{carrera.nombre}, {carrera.numero}, {carrera.fecha}, {carrera.circuito.nombre}, {carrera.circuito.pais}, {carrera.circuito.localidad}, {carrera.circuito.latitud}, {carrera.circuito.longitud}\n")
+            archivo.write(f"{carrera.nombre},{carrera.numero},{carrera.fecha},{carrera.circuito}\n")
     return carreras
 
 
