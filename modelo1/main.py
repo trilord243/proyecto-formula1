@@ -3,7 +3,7 @@
 from Gestion_Carrera import Gestion_carrera
 from Gestion_asistencia import Gestion_Asistencia
 from Venta_entradas import Venta_entradas
-
+from Gestion_Restaurantes import Gestion_Restaurantes
 #Se crea una funcion main que se ejecuta cuando se ejecuta el programa
 def main():
     menu_principal = True
@@ -12,6 +12,7 @@ def main():
         print("1. Gestionar carreras")
         print("2.venta de entradas")
         print("3.Gestion_asistencia ")
+        print("4.Gestion_Restaurantes")
         opcion = input("Escoge una opcion: ")
         if opcion == "1":
             volver_al_menu_principal = Gestion_carrera().start()
@@ -21,6 +22,9 @@ def main():
             Venta_entradas().start()
         elif opcion == "3":
             Gestion_Asistencia().start()
+        elif opcion=="4":
+            Gestion_Restaurantes().start()
+            
             
         else:
             print("Opción no válida")
