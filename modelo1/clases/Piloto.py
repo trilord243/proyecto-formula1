@@ -14,5 +14,5 @@ class Piloto:
     
     
     def guardar_datos(self):
-        with open("pilotos.txt", "a") as archivo:
+        with open("datos/pilotos.txt", "a") as archivo:
             archivo.write(f"{self.nombre},{self.apellido},{self.fecha_nacimiento},{self.lugar_nacimiento},{self.numero},{self.id},{self.puntos}\n")

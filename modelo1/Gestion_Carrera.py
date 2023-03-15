@@ -9,10 +9,12 @@ from clases.Constructor import Constructor
 from clases.Piloto import Piloto
 import random
 
+
 # Crear instancias de las APIs con sus respectivas clases y endpoints
 api_constructores = ApiConstructores('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/constructors.json')
 api_pilotos = ApiPilotos('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/drivers.json')
 api_carreras = ApiCarreras('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json')
+
 
 # Lista de constructores registrados
 constructores = []
@@ -36,7 +38,7 @@ carreras = []
 
 
 #Esta clase app contiene la aplicacion del modulo 1
-class App:
+class Gestion_carrera:
     
         
         
@@ -54,7 +56,7 @@ class App:
         pilotos_api = api_pilotos.obtener_pilotos()
         
         #Creando y abriendo el txt de constructores.txt
-        with open('constructor.txt', 'w') as archivo:
+        with open('datos/constructor.txt', 'w') as archivo:
             #Recorriendo el api constructores
             for constructor_api in constructores_api:
                 #Extraer informacion del constructor    
@@ -79,7 +81,7 @@ class App:
         pilotos_api = api_pilotos.obtener_pilotos()
       
        #Creando y abriendo el txt de pilotos.txt
-        with open('pilotos.txt', 'w') as archivo:
+        with open('datos/pilotos.txt', 'w') as archivo:
             #Recorriendo el api de pilotos
             for piloto_api in pilotos_api:
                 #Extraer informacion del piloto
@@ -105,7 +107,7 @@ class App:
         carreras_api = api_carreras.obtener_carreras()
         
         #Creando y abriendo el txt de carreras.txt
-        with open("carreras.txt", "w") as archivo:
+        with open("datos/carreras.txt", "w") as archivo:
             #Recorriendo el api de carreras
             for carrera_api in carreras_api:
                 # Extraer información de la carrera
@@ -132,7 +134,7 @@ class App:
         #Llamando a las apis correspondientes
         circuitos_api=api_carreras.obtener_carreras()
         #Creando y abriendo el txt de carreras.txt
-        with open("circuitos.txt", "w") as archivo:
+        with open("datos/circuitos.txt", "w") as archivo:
             #Recorriendo el api de carreras
             for circuito_api in circuitos_api:
                  # Extraer información de la carrera
@@ -159,7 +161,7 @@ class App:
     #Funcion que busca los constructores por pais. Donde recibe por parametro el pais
     def buscar_constructores_por_pais(self, pais):
         #Abrimos el archivo.txt que esta almacenado los datos de los constructores
-        with open('constructor.txt') as f:
+        with open('datos/constructor.txt') as f:
             #Leer todas las lineas del constructor.txt y almacena una lista llamada lineas 
             lineas = f.readlines()
             #Se crea un booleano para un condicional
@@ -187,7 +189,7 @@ class App:
         #Creo una lista vacia para guardar los datos de los constructores
         constructor_dict = {}
         #Abro el archivo constructor.txt
-        with open('constructor.txt') as f:
+        with open('datos/constructor.txt') as f:
             #Leer todas las lineas del constructor.txt y almacena una lista llamada
             lineas=f.readlines()
             
@@ -200,7 +202,7 @@ class App:
         for key,value in constructor_dict.items():
             #Si el key del diccionario es igual al nombre del parametro recibido entonces se abre el archivo pilotos.txt
             if key==a:
-                with open('pilotos.txt') as f:
+                with open('datos/pilotos.txt') as f:
                     lineas=f.readlines()
                     for lineas in lineas:
                         pilotos = lineas.strip().split(',')
@@ -227,7 +229,7 @@ class App:
         \n """
         print(mensaje)
         dict_construcores_numero = {}
-        with open('constructor.txt') as f:
+        with open('datos/constructor.txt') as f:
             contador = 0
             #Leer todas las lineas del constructor.txt y almacena una lista llamada
             lineas=f.readlines()
@@ -392,7 +394,7 @@ class App:
         #Creando un diccionarrio para guardar los pais
         dict_paises_numero = {}
         #Abriendo el constructor.txt para sacar los paises disponibles
-        with open('constructor.txt') as f:
+        with open('datos/constructor.txt') as f:
             lineas = f.readlines()
             contador = 0
             for linea in lineas:
@@ -455,6 +457,7 @@ class App:
        
     def start(self):
         menu_val = True
+        volver_al_menu_principal = False
         while menu_val:
             self.registrar_constructores()
             self.registrar_pilotos()
@@ -467,8 +470,6 @@ class App:
             print("3. Buscar carreras por país")
             print("4. Buscar carreras por mes")
             print("5. Finalizar carrera y asignar puntos")
-           
-            
             
             opcion=input("Escriba la opcion: ")
             if opcion=="1":
@@ -487,18 +488,21 @@ class App:
                 carrera_numero = input("Ingrese el número de la carrera a finalizar: ")
                 while not carrera_numero.isdigit():
                     carrera_numero=input("Ingrese un valor numerico: ")
-                
                 data=int(carrera_numero)
-                    
                 self.finalizar_carrera(data)
+            else:
+                print("Opción no válida. Regresando al menú principal.")
+                menu_val = False
+                volver_al_menu_principal = True  # Cambiar el valor de la variable aquí
+
+        return volver_al_menu_principal  # Asegurarse de que el 'return' esté fuera del bucle 'while'
+
+                    
                 
                 
                 
             
             
-            else: 
-                menu_val=False
-        
             
             
         

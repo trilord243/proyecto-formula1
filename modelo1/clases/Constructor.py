@@ -14,5 +14,5 @@ class Constructor:
         self.puntos += puntos
     
     def guardar_datos(self):
-        with open("constructor_with_points.txt", "a") as archivo:
+        with open("datos/constructor_with_points.txt", "a") as archivo:
             archivo.write(f"{self.nombre},{self.id},{self.nacionalidad},{self.pilotos_ref[0]},{self.pilotos_ref[1]},{self.puntos}\n")
