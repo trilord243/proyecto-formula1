@@ -1,7 +1,7 @@
 
 #Se importa la clase App que contiene la funcionalidad del programa
 from Gestion_Carrera import Gestion_carrera
-
+from Gestion_asistencia import Gestion_Asistencia
 from Venta_entradas import Venta_entradas
 
 #Se crea una funcion main que se ejecuta cuando se ejecuta el programa
@@ -11,6 +11,7 @@ def main():
         print("Bienvenido a todos! ")
         print("1. Gestionar carreras")
         print("2.venta de entradas")
+        print("3.Gestion_asistencia ")
         opcion = input("Escoge una opcion: ")
         if opcion == "1":
             volver_al_menu_principal = Gestion_carrera().start()
@@ -18,6 +19,9 @@ def main():
                 menu_principal = False
         elif opcion == "2":
             Venta_entradas().start()
+        elif opcion == "3":
+            Gestion_Asistencia().start()
+            
         else:
             print("Opción no válida")
             menu_principal = False

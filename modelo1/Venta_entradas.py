@@ -137,7 +137,14 @@ class Venta_entradas:
                     print(f"Por favor, ingrese un número entre 1 y {numero_carreras}.")
             except ValueError:
                 print("Por favor, ingrese un valor numérico.")
-        tipo_entrada = input("Ingrese el tipo de entrada que desea comprar (general/vip): ").lower()
+        
+        tipo_menu=True
+        while tipo_menu:
+            tipo_entrada = input("Ingrese el tipo de entrada que desea comprar (general/vip): ").lower()
+            if tipo_entrada == "vip" or tipo_entrada == "general":
+                tipo_menu=False
+            else:
+                print("Por favor, ingrese 'general' o 'vip'.")
         self.mostrar_asientos_disponibles(carrera_seleccionada, tipo_entrada)
        
        
