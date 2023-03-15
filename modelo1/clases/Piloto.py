@@ -6,6 +6,13 @@ class Piloto:
         self.lugar_nacimiento = lugar_nacimiento
         self.numero = numero
         self.id = id
+        self.puntos=0
 
-    def asignar_constructor(self, constructor):
-        self.constructor = constructor
+    
+    def agregar_puntos(self, puntos):
+        self.puntos += puntos
+    
+    
+    def guardar_datos(self):
+        with open("pilotos.txt", "a") as archivo:
+            archivo.write(f"{self.nombre},{self.apellido},{self.fecha_nacimiento},{self.lugar_nacimiento},{self.numero},{self.id},{self.puntos}\n")

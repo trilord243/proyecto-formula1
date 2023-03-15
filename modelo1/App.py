@@ -7,7 +7,7 @@ from clases.Carrera import Carrera
 from clases.Circuito import Circuito
 from clases.Constructor import Constructor
 from clases.Piloto import Piloto
-
+import random
 
 # Crear instancias de las APIs con sus respectivas clases y endpoints
 api_constructores = ApiConstructores('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/constructors.json')
@@ -27,7 +27,7 @@ pilotos = []
 circuito = []
 
 
-
+carreras = []
 
 
 
@@ -38,6 +38,8 @@ circuito = []
 #Esta clase app contiene la aplicacion del modulo 1
 class App:
     
+        
+        
   
     
     
@@ -101,7 +103,7 @@ class App:
     def registrar_carreras(self):
         #Llamando a las apis correspondientes
         carreras_api = api_carreras.obtener_carreras()
-        carreras = []
+        
         #Creando y abriendo el txt de carreras.txt
         with open("carreras.txt", "w") as archivo:
             #Recorriendo el api de carreras
@@ -422,19 +424,52 @@ class App:
         elif type(data) == str:
             return data
         
-           
+    def finalizar_carrera(self,carrera_numero):
+        # Selecciona 10 pilotos al azar y les asigna una posición
+        pilotos_seleccionados = random.sample(pilotos, 10)
+        pilotos_seleccionados.sort(key=lambda x: x.puntos, reverse=True)
+
+        # Asigna puntos a los pilotos según su posición
+        puntos = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1]
+        for i, piloto in enumerate(pilotos_seleccionados):
+            piloto.agregar_puntos(puntos[i])
+            piloto.guardar_datos()
+
+            # Encuentra y actualiza el constructor al que pertenece el piloto
+            for constructor in constructores:
+                if piloto.id in constructor.pilotos_ref:
+                    constructor.agregar_puntos(puntos[i])
+                    constructor.guardar_datos()
+        
+        for carrera in carreras:
+            if carrera.numero == carrera_numero:
+                carrera.podium = [piloto.id for piloto in pilotos_seleccionados[:3]]
+                carrera.guardar_datos()
+
+        # Imprime el podio
+        print("Podio:")
+        for i in range(3):
+            print(f"{i + 1}. {pilotos_seleccionados[i].nombre} {pilotos_seleccionados[i].apellido} - {puntos[i]} puntos")   
        
        
        
     def start(self):
         menu_val = True
         while menu_val:
-            """self.registrar_constructores()
+            self.registrar_constructores()
             self.registrar_pilotos()
             self.registrar_carreras()
-            self.registrar_circuitos()"""
-            print("Bienvenido al primer modulo del programa de formula 1 ! \n")
-            print("Seleccione una opcion para lo que desea realizar: \n")
+            self.registrar_circuitos()
+            print("Bienvenido al primer modulo del programa de Formula 1 !\n")
+            print("Seleccione una opcion para lo que desea realizar:\n")
+            print("1. Buscar constructores por país")
+            print("2. Buscar pilotos por constructor")
+            print("3. Buscar carreras por país")
+            print("4. Buscar carreras por mes")
+            print("5. Finalizar carrera y asignar puntos")
+           
+            
+            
             opcion=input("Escriba la opcion: ")
             if opcion=="1":
                 pais=self.imprimir_paises()
@@ -448,6 +483,14 @@ class App:
             elif opcion=="4":
                 mes=self.imprimir_meses()
                 self.buscar_carreras_por_mes(mes)
+            elif opcion == "5":
+                carrera_numero = input("Ingrese el número de la carrera a finalizar: ")
+                while not carrera_numero.isdigit():
+                    carrera_numero=input("Ingrese un valor numerico: ")
+                
+                data=int(carrera_numero)
+                    
+                self.finalizar_carrera(data)
                 
                 
                 
