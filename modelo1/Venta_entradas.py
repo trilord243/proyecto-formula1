@@ -1,184 +1,184 @@
 import requests
-import random
+import json
+import uuid
+from clases.Cliente import Cliente
 
-from clases.Carrera import Carrera
-response = requests.get("https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json")
-carreras_api = response.json()
 class Venta_entradas:
     def __init__(self):
-        self.carreras = []
-        self.sala = Sala()  # Crear una instancia de la clase Sala
-        self.cargar_carreras()
-
+        self.url = "https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json"
+        self.carreras = self.cargar_carreras()
 
     def cargar_carreras(self):
-        for carrera_api in carreras_api:
-            nombre = carrera_api["name"]
-            numero = int(carrera_api["round"])
-            fecha = carrera_api["date"]
-            circuito = carrera_api["circuit"]["circuitId"]
-            carrera = Carrera(nombre, numero, fecha, circuito)
-            self.carreras.append(carrera)
-
-    def cargar_asientos_txt(self):
-        asientos = []
         try:
-            with open("datos/asientos.txt", "r") as file:
-                for fila, line in enumerate(file):
-                    fila_asientos = []
-                    for columna, estado in enumerate(line.strip()):
-                        fila_asientos.append(estado == "L")
-                    asientos.append(fila_asientos)
+            response = requests.get(self.url)
+            if response.status_code == 200:
+                carreras = json.loads(response.text)
+                return carreras
+            else:
+                print("Error al obtener carreras desde la API")
+                return []
+        except Exception as e:
+            print("Error al cargar carreras:", e)
+            return []
+    def cargar_asientos_disponibles(self, carrera):
+        try:
+            with open(f"datos/asientos_{carrera}.txt", "r") as archivo_asientos:
+                asientos_ocupados = archivo_asientos.read().splitlines()
+                asientos_ocupados = [tuple(map(int, asiento.split(','))) for asiento in asientos_ocupados]
+                return asientos_ocupados
         except FileNotFoundError:
-            print("Archivo de asientos no encontrado. Se creará uno nuevo.")
-            self.crear_archivo_asientos_vacios()  # Crear archivo de asientos vacíos si no existe
-            asientos = self.cargar_asientos_txt()  # Intentar cargar de nuevo el archivo recién creado
-        return asientos
-    
-    
-
-    def mostrar_asientos(self):
-        self.sala.mostrar_asientos()
-
-            
-            
-    def guardar_asientos_txt(self):
-        with open("datos/asientos.txt", "w") as file:
-            for fila in range(len(self.sala.asientos)):
-                for columna in range(len(self.sala.asientos[fila])):
-                    file.write("D" if not self.sala.asientos[fila][columna] else "L")
-                file.write("\n")
-
-    
-
-
-            
-    def guardar_cliente_token(self, cliente, token):
-        with open("datos/cliente_tokens.txt", "a") as archivo:
-            archivo.write(f"{cliente.cedula},{token}\n")
-
+            return []
+        
+        
+    def registrar_asiento(self, carrera, fila, asiento):
+        with open(f"datos/asientos_{carrera}.txt", "a") as archivo_asientos:
+            archivo_asientos.write(f"{fila},{asiento}\n")
     def mostrar_carreras(self):
-        for carrera in self.carreras:
-            print(carrera)
-
-    def preguntar_datos_cliente(self):
-        nombre = input("Nombre del cliente: ")
-        cedula = input("Cedula: ")
-        edad = int(input("Edad: "))
-        self.mostrar_carreras()
-        carrera_numero = int(input("Número de la carrera a la que desea comprar ticket: "))
-        tipo_entrada = input("Tipo de entrada que desea comprar (General/VIP): ")
-        fila = int(input("Seleccione la fila (1-10): "))
-        return Cliente(nombre, cedula, edad, carrera_numero, tipo_entrada, fila)
-
-
+        for i, carrera in enumerate(self.carreras):
+            print(f"{i + 1}. {carrera['name']} - {carrera['date']} - {carrera['circuit']['name']}")
     
-    def vender_entrada(self, cliente):
-        # Seleccionar carrera
-        carrera_seleccionada = None
-        for carrera in self.carreras:
-            if carrera.numero == cliente.carrera_numero:
-                carrera_seleccionada = carrera
+    def mostrar_asientos_disponibles(self, carrera, tipo_entrada):
+        filas, columnas = self.carreras[carrera]['map'][tipo_entrada]
+        asientos_ocupados = self.cargar_asientos_disponibles(self.carreras[carrera]['name'])
+
+        print(f"Asientos disponibles para la entrada {tipo_entrada}:")
+        for i in range(filas):
+            for j in range(columnas):
+                if (i, j) not in asientos_ocupados:
+                    print(f"[{i + 1},{j + 1}]", end=" ")
+                else:
+                    print("[X]", end=" ")
+            print()
+
+    def obtener_datos_cliente(self):
+        nombre = input("Ingrese su nombre: ")
+
+        while True:
+            try:
+                cedula = int(input("Ingrese su cédula: "))
                 break
+            except ValueError:
+                print("Por favor, ingrese un valor numérico para la cédula.")
 
-        # Asignar asiento disponible en la fila elegida
-        asiento_fila = cliente.fila
-        asiento_columna = random.randint(1, 10)
-        while carrera_seleccionada.asientos[asiento_fila - 1][asiento_columna - 1]:  # Si el asiento no está disponible, buscar otro en la misma fila
-            asiento_columna = random.randint(1, 10)
+        while True:
+            try:
+                edad = int(input("Ingrese su edad: "))
+                break
+            except ValueError:
+                print("Por favor, ingrese un valor numérico para la edad.")
 
-        carrera_seleccionada.asientos[asiento_fila - 1][asiento_columna - 1] = True  # Marcar el asiento como no disponible
-        self.guardar_asientos_txt()  # Actualizar el archivo de asientos
-        asiento = Asiento(asiento_fila, asiento_columna)
-        entrada = Entrada(cliente, carrera_seleccionada, asiento, cliente.tipo_entrada)
-
-        return entrada
+        return Cliente(nombre, cedula, edad)
 
 
+    def es_numero_ondulado(self, num):
+        prev = num % 10
+        num = num // 10
+        es_par = prev % 2 == 0
+        while num > 0:
+            digito = num % 10
+            if (digito % 2 == 0) == es_par:
+                return False
+            es_par = not es_par
+            prev = digito
+            num = num // 10
+        return True
 
-    def es_numero_ondulado(self, numero):
-        numero = str(numero)
-        for i in range(1, len(numero) - 1):
-            if int(numero[i]) == (int(numero[i - 1]) + int(numero[i + 1])) / 2:
-                return True
-        return False
-
-    def calcular_costo_entrada(self, entrada):
-        costo_base = 150 if entrada.tipo_entrada == "General" else 340
-        subtotal = costo_base
-
-        if self.es_numero_ondulado(entrada.cliente.cedula):
-            descuento = costo_base * 0.5
-        else:
-            descuento = 0
-
-        subtotal -= descuento
+    def calcular_costo_entrada(self, tipo_entrada, cedula):
+        precio_base = 150 if tipo_entrada == "general" else 340
+        descuento = 0.5 if self.es_numero_ondulado(int(cedula)) else 1
+        subtotal = precio_base * descuento
         iva = subtotal * 0.16
         total = subtotal + iva
-
         return subtotal, descuento, iva, total
 
-    def confirmar_pago(self, entrada, subtotal, descuento, iva, total):
-        print("\nResumen de compra:")
-        print("Asiento:", entrada.asiento)
-        print("Subtotal: ${:.2f}".format(subtotal))
-        print("Descuento: ${:.2f}".format(descuento))
-        print("IVA: ${:.2f}".format(iva))
-        print("Total: ${:.2f}".format(total))
+    def guardar_venta(self, venta_info):
+        try:
+            with open("datos/ventas.txt", "a") as archivo_ventas:
+                archivo_ventas.write(venta_info + "\n")
+        except Exception as e:
+            print("Error al guardar la venta:", e)
 
-        confirmacion = input("\n¿Desea proceder con el pago? (S/N): ")
-        if confirmacion.lower() == "s":
-            print("Pago exitoso.")
-            print("Token de entrada: ", entrada.token)
-            return True
-        else:
-            print("Pago cancelado.")
-            return False
-
-    def menu(self):
-        print("Menú:")
-        print("1. Comprar entrada")
-        print("2. Salir")
-        opcion = int(input("Seleccione una opción: "))
-        return opcion
-
-    def guardar_venta(self, entrada):
-        with open("datos/ventas.txt", "a") as file:
-            file.write(str(entrada) + "\n")
-
-    def comprar_entrada(self):
-        cliente = self.preguntar_datos_cliente()
-        entrada = self.vender_entrada(cliente)
-        subtotal, descuento, iva, total = self.calcular_costo_entrada(entrada)
-        if self.confirmar_pago(entrada, subtotal, descuento, iva, total):
-            self.guardar_cliente_token(cliente, entrada.token)
-            self.guardar_venta(entrada)
-    def actualizar_asientos_txt(self, carrera):
-        with open(f"datos/asientos_carrera_{carrera.numero}.txt", "w") as file:
-            for fila in range(len(carrera.asientos)):
-                for columna in range(len(carrera.asientos[fila])):
-                    estado = "D" if carrera.asientos[fila][columna] else "L"  # D = Disponible, L = No disponible
-                    file.write(f"{estado}({fila + 1},{columna + 1}) ")
-                file.write("\n")
-                
-                
-                
+    def guardar_token(self, token_info):
+        try:
+            with open("datos/tokens.txt", "a") as archivo_tokens:
+                archivo_tokens.write(token_info + "\n")
+        except Exception as e:
+            print("Error al guardar el token:", e)
+    def generar_token(self):
+        return str(uuid.uuid4())
+    
     
     def start(self):
-        volver_al_menu_principal = False
-        while True:
-            opcion = self.menu()
-            if opcion == 1:
-                self.comprar_entrada()
-            elif opcion == 2:
-                print("Gracias por usar nuestro sistema.")
-                break
-            else:
-                print("Opción no válida, por favor intente nuevamente.")
-                volver_al_menu_principal = True
-        return volver_al_menu_principal  # Asegurarse de que el 'return' esté fuera del bucle 'while'
-
-
+       
+        cliente = self.obtener_datos_cliente()
+        self.mostrar_carreras()
         
         
+       
+       
+       
+       
+       
+       
+       
+       
+        numero_carreras = len(self.carreras)
+        carrera_menu=True
+        while carrera_menu:
+            try:
+                carrera_seleccionada = int(input(f"Seleccione el número de la carrera a la que desea comprar un ticket (1-{numero_carreras}): ")) - 1
+                if 0 <= carrera_seleccionada < numero_carreras:
+                    carrera_menu=False
+                else:
+                    print(f"Por favor, ingrese un número entre 1 y {numero_carreras}.")
+            except ValueError:
+                print("Por favor, ingrese un valor numérico.")
+        tipo_entrada = input("Ingrese el tipo de entrada que desea comprar (general/vip): ").lower()
+        self.mostrar_asientos_disponibles(carrera_seleccionada, tipo_entrada)
+       
+       
+       
+       
+       
+        menu_fila=True
+        while menu_fila:
+            try:
+                fila = int(input("Ingrese el número de fila del asiento que desea comprar: ")) - 1
+                menu_fila = False
+            except ValueError:
+                print("Por favor, ingrese un valor numérico.")
+        menu_asiento=True
+        while menu_asiento:
+            try:
+                asiento = int(input("Ingrese el número de asiento que desea comprar: ")) - 1
+                menu_asiento=False
+            except ValueError:
+                print("Por favor, ingrese un valor numérico.")
 
+        self.registrar_asiento(self.carreras[carrera_seleccionada]['name'], fila, asiento)
+        
+        # Aquí puedes implementar la selección de asientos y la generación del token
+
+        subtotal, descuento, iva, total = self.calcular_costo_entrada(tipo_entrada, cliente.cedula)
+        print(f"Subtotal: ${subtotal:.2f}")
+        print(f"Descuento: ${subtotal * (1 - descuento):.2f}")
+        print(f"IVA: ${iva:.2f}")
+        print(f"Total: ${total:.2f}")
+
+        confirmar_compra = input("¿Desea proceder a pagar la entrada? (S/N): ").lower()
+        if confirmar_compra == 's':
+            # Aquí puedes implementar la ocupación del asiento
+            
+            
+
+            token = self.generar_token()
+
+            venta_info = f"{cliente.nombre},{cliente.cedula},{cliente.edad},{self.carreras[carrera_seleccionada]['name']},{tipo_entrada},{total}"
+            self.guardar_venta(venta_info)
+
+            token_info = f"{token},{cliente.nombre},{cliente.cedula},{self.carreras[carrera_seleccionada]['name']},{tipo_entrada},{total}"
+            self.guardar_token(token_info)
+
+            print("Pago exitoso.")
+        else:
+            print("Compra cancelada.")

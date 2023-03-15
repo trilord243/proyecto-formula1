@@ -10,7 +10,7 @@ def main():
     while menu_principal:
         print("Bienvenido a todos! ")
         print("1. Gestionar carreras")
-        print("venta de entradas")
+        print("2.venta de entradas")
         opcion = input("Escoge una opcion: ")
         if opcion == "1":
             volver_al_menu_principal = Gestion_carrera().start()

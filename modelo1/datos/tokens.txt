@@ -1,0 +1,8 @@
+GENERAR_TOKEN,Felipe,324,Saudi Arabian Grand Prix,vip,394.4
+caa361f9-dc3b-418d-9bdc-ea344987a043,Felipe,23423,Saudi Arabian Grand Prix,vip,394.4
+54583f19-a545-41ad-afd9-e13e19cae058,Felipe,4354,Saudi Arabian Grand Prix,vip,394.4
+af4316c4-9360-421e-982f-e973b8e6c762,Felipe Escalona,3454,Saudi Arabian Grand Prix,general,87.0
+824fc22e-fe3a-4ed6-a599-7511b89e1bfe,Felipe,12312,Bahrain Grand Prix,vip,394.4
+0b77d116-f27c-4079-b848-1139dbb57b26,Feliep,234,Bahrain Grand Prix,general,87.0
+ecc9b67c-197e-463a-bf88-1475a5597c44,Felipe,26573457,Bahrain Grand Prix,general,174.0
+e3d758b0-e1f4-4edb-a8ff-9c2607edb3ed,Felipe,23423,Mexico City Grand Prix,vip,394.4

@@ -1,0 +1,10 @@
+Alfa Romeo,alfa,Swiss, bottas,zhou 
+AlphaTauri,alphatauri,Italian, de_vries,tsunoda 
+Alpine F1 Team,alpine,French, gasly,ocon 
+Aston Martin,aston_martin,British, alonso,stroll 
+Ferrari,ferrari,Italian, leclerc,sainz 
+Haas F1 Team,haas,American, hulkenberg,kevin_magnussen 
+McLaren,mclaren,British, norris,piastri 
+Mercedes,mercedes,German, hamilton,russell 
+Red Bull,red_bull,Austrian, perez,max_verstappen 
+Williams,williams,British, albon,sargeant 
