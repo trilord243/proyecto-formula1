@@ -101,15 +101,19 @@ class Venta_entradas:
     def guardar_token(self, token_info):
         try:
             with open("datos/tokens.txt", "a") as archivo_tokens:
-                archivo_tokens.write(token_info + "\n")
+                archivo_tokens.write(token_info + ",Asistirá\n")  # Agregar ",Asistirá" al final de la línea
         except Exception as e:
             print("Error al guardar el token:", e)
+
+    
+    
+    
     def generar_token(self):
         return str(uuid.uuid4())
     
     
     def start(self):
-       
+        
         cliente = self.obtener_datos_cliente()
         self.mostrar_carreras()
         
@@ -167,10 +171,6 @@ class Venta_entradas:
 
         confirmar_compra = input("¿Desea proceder a pagar la entrada? (S/N): ").lower()
         if confirmar_compra == 's':
-            # Aquí puedes implementar la ocupación del asiento
-            
-            
-
             token = self.generar_token()
 
             venta_info = f"{cliente.nombre},{cliente.cedula},{cliente.edad},{self.carreras[carrera_seleccionada]['name']},{tipo_entrada},{total}"
@@ -180,5 +180,6 @@ class Venta_entradas:
             self.guardar_token(token_info)
 
             print("Pago exitoso.")
+            print(f"Su token de entrada es: {token}")  # Muestra el token al cliente
         else:
             print("Compra cancelada.")
