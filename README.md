@@ -5,12 +5,12 @@ Para inicializar el programa con esto te recomiendo activar un entorno virtual d
 
     En windows
     ```
-    python3 -m venv venv
+    python -m venv venv
     venv\Scripts\activate
     ```
     En linux
     ```
-    python3 -m venv venv
+    python -m venv venv
     source venv/bin/activate
     ```
     Para desactivar el entorno vitual escribir en la terminal
@@ -35,5 +35,5 @@ Una vez que hayas hecho tu ambiente virtual escribir en la terminal para instala
 
     Ya estas listo para correr el programa! solo pon en tu terminal este comando para correr el programa
     ```
-    python3 main.py
+    python main.py
     ```
