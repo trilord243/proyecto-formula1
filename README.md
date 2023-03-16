@@ -1,6 +1,17 @@
 # Bienvenido a mi proyecto de Formula1
 
-Para inicializar el programa con esto te recomiedno activar un entorno virtual de python para que no tengas ningun problema con las versiones
+#Primero clona o descargate el repositorio 
+
+Para clonar el repositorio si tienes git instalado 
+
+    ```
+    git clone url-del-repo
+
+    ```
+
+
+
+Para inicializar el programa con esto te recomiendo activar un entorno virtual de python para que no tengas ningun problema con las versiones
 
     En windows
     ```
