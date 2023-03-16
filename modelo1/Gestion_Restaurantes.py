@@ -1,7 +1,7 @@
 import json
 import requests
 
-class GestionCarreras:
+class Gestion_Restaurante:
     def __init__(self):
         self.url = 'https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json'
         self.data = self.load_data()
@@ -66,5 +66,5 @@ class GestionCarreras:
                 print('Opción inválida, por favor intente de nuevo.')
 
 
-gestion_carreras = GestionCarreras()
-gestion_carreras.start()
+
+

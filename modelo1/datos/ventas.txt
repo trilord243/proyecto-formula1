@@ -2,3 +2,4 @@ Felipe,26573457,30,Bahrain Grand Prix,vip,394.4
 Felipe,23423,23,Bahrain Grand Prix,general,174.0
 Felipe,123,23,Saudi Arabian Grand Prix,vip,197.2
 Felipe ,2345,23,Saudi Arabian Grand Prix,general,87.0
+Felipe,45468,564,Abu Dhabi Grand Prix,general,174.0

@@ -493,7 +493,7 @@ class Gestion_carrera:
             else:
                 print("Opción no válida. Regresando al menú principal.")
                 menu_val = False
-                volver_al_menu_principal = True  # Cambiar el valor de la variable aquí
+                volver_al_menu_principal = True  
 
         return volver_al_menu_principal  # Asegurarse de que el 'return' esté fuera del bucle 'while'
 
