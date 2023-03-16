@@ -27,7 +27,7 @@ Una vez que hayas hecho tu ambiente virtual escribir en la terminal para instala
     Muevete a la carpeta de modulo1 en tu terminal que se encuentran todos los archivos del proyecto
 
     ```
-    cd modulo1
+    cd modelo1
     ```
 
 ## Correr el programa
