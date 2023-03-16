@@ -52,18 +52,18 @@ class Venta_entradas:
 
     def obtener_datos_cliente(self):
         nombre = input("Ingrese su nombre: ")
-
-        while True:
+        dato_menu1=True
+        while dato_menu1:
             try:
                 cedula = int(input("Ingrese su cédula: "))
-                break
+                dato_menu1=False
             except ValueError:
                 print("Por favor, ingrese un valor numérico para la cédula.")
-
-        while True:
+        dato_menu2=True
+        while dato_menu2:
             try:
                 edad = int(input("Ingrese su edad: "))
-                break
+                dato_menu2=False
             except ValueError:
                 print("Por favor, ingrese un valor numérico para la edad.")
 

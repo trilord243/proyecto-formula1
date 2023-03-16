@@ -27,7 +27,7 @@ class Estadisticas:
             for linea in tokens_file:
                 campos = linea.strip().split(',')
                 race_name = campos[3]
-                boletos_vendidos[race_name] += 1
+                boletos_vendidos[race_name] = boletos_vendidos.get(race_name, 0) + 1
 
         carrera_mayor_boletos_vendidos = max(boletos_vendidos, key=boletos_vendidos.get)
         return carrera_mayor_boletos_vendidos
@@ -103,7 +103,7 @@ class Estadisticas:
 
         carrera_mayor_asistencia = max(asistencia, key=asistencia.get)
         return carrera_mayor_asistencia
- 
+
  
     def calcular_promedio_gasto_vip_por_carrera(self):
         gastos_por_carrera = {}
@@ -173,16 +173,11 @@ class Estadisticas:
         plt.title('Promedio de gasto VIP por carrera')
         plt.xticks(rotation=90)
         plt.show()
-    def grafico_asistencia(self, estadisticas, asistencia_ordenada):
-        carreras = [race_name for race_name, stats in asistencia_ordenada]
-        asistentes = [stats["personas_asistieron"] for race_name, stats in asistencia_ordenada]
+    
+    
 
-        plt.bar(carreras, asistentes)
-        plt.xlabel('Carreras')
-        plt.ylabel('Asistentes')
-        plt.title('Asistencia por carrera')
-        plt.xticks(rotation=90)
-        plt.show()
+
+
     def grafico_mayor_asistencia(self, asistencia_ordenada):
         carreras = [race_name for race_name, stats in asistencia_ordenada]
         asistentes = [stats["personas_asistieron"] for race_name, stats in asistencia_ordenada]
@@ -209,8 +204,8 @@ class Estadisticas:
     def start(self):
         estadisticas = Estadisticas()
         estadisticas.cargar_datos()
-
-        while True:
+        menu_estat=True
+        while menu_estat:
             print("\nMenú de estadísticas:")
             print("1. Promedio de gasto VIP por carrera")
             print("2. Estadísticas de asistencia")
@@ -220,34 +215,39 @@ class Estadisticas:
             print("6. Top 3 clientes que más compraron boletos")
             print("0. Salir")
 
-            opcion = int(input("Seleccione una opción: "))
+            opcion = input("Seleccione una opción: ")
 
-            if opcion == 1:
+            if opcion == "1":
                 promedio_gasto_por_carrera = estadisticas.calcular_promedio_gasto_vip_por_carrera()
-                print("Promedio de gasto VIP por carrera:")
+                print("\nPromedio de gasto VIP por carrera:\n")
                 self.grafico_promedio_gasto_vip_por_carrera(estadisticas)
                 for carrera, promedio in promedio_gasto_por_carrera.items():
-                    print(f"{carrera}: ${promedio:.2f}")
-            elif opcion == 2:
+                    print(f"\n{carrera}: ${promedio:.2f}\n")
+            elif opcion == "2":
                 asistencia_ordenada = estadisticas.estadisticas_asistencia()
                 self.grafico_asistencia(estadisticas, asistencia_ordenada)
-            elif opcion == 3:
-                asistencia_ordenada = estadisticas.estadisticas_asistencia()
-                self.grafico_mayor_asistencia(asistencia_ordenada)
+            elif opcion == "3":
+                # Llama al método carrera_mayor_asistencia() y muestra el resultado
                 carrera_con_mayor_asistencia = estadisticas.carrera_mayor_asistencia()
-                print("La carrera con mayor asistencia fue:", carrera_con_mayor_asistencia)
-            elif opcion == 5:
+                print("\nLa carrera con mayor asistencia fue:", carrera_con_mayor_asistencia)
+                
+               
+                
+                
+            elif opcion == "4":
+                carrera_con_mayor_boletos_vendidos = estadisticas.carrera_mayor_boletos_vendidos()
+                print("\nLa carrera con mayor cantidad de boletos vendidos fue:", carrera_con_mayor_boletos_vendidos)
+            elif opcion == "5":
                 top_3_productos = estadisticas.top_productos_vendidos()
-                print("Top 3 productos más vendidos en el restaurante:")
+                print("\nTop 3 productos más vendidos en el restaurante:\n")
                 for i, producto in enumerate(top_3_productos, 1):
-                    print(f"{i}. {producto[0]}: {producto[1]} ventas")
-            elif opcion == 6:
+                    print(f"\n{i}. {producto[0]}: {producto[1]} ventas\n")
+            elif opcion == "6":
                 top_clientes = estadisticas.top_3_clientes()
                 for cedula, boletos_comprados in top_clientes:
-                    print(f"La cédula {cedula} compró {boletos_comprados} boletos.")
-            elif opcion == 0:
+                    print(f"\nLa cédula {cedula} compró {boletos_comprados} boletos.\n")
+            elif opcion == "0":
                 print("Saliendo del menú de estadísticas...")
-                break
+                menu_estat=False
             else:
-                print("Opción inválida. Intente de nuevo.")
-Estadisticas().start()
+                print("Opción inválida")

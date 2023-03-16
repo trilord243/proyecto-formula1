@@ -39,7 +39,8 @@ class Gestion_Restaurante:
 
     def start(self):
         print('Bienvenido al sistema de gestión de restaurantes de carreras F1 VIP')
-        while True:
+        menu_val=True
+        while menu_val:
             print('1. Buscar productos')
             print('2. Salir')
             option = input('Seleccione una opción: ')
@@ -49,10 +50,14 @@ class Gestion_Restaurante:
                 min_price = input('Ingrese el precio mínimo (opcional): ')
                 max_price = input('Ingrese el precio máximo (opcional): ')
 
-                if min_price:
-                    min_price = float(min_price)
-                if max_price:
-                    max_price = float(max_price)
+                try:
+                    if min_price:
+                        min_price = float(min_price)
+                    if max_price:
+                        max_price = float(max_price)
+                except ValueError:
+                    print("Error: Por favor, ingrese un valor numérico válido para el precio mínimo y/o máximo.")
+                    continue
 
                 results = self.search(name, product_type, min_price, max_price)
 
@@ -61,7 +66,7 @@ class Gestion_Restaurante:
                     print(f"Nombre: {product['name']}, Tipo: {product['type']}, Precio: {product['price']}")
             elif option == '2':
                 print('Gracias por usar el sistema de gestión de restaurantes de carreras F1 VIP')
-                break
+                menu_val=False
             else:
                 print('Opción inválida, por favor intente de nuevo.')
 
