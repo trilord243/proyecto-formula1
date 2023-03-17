@@ -225,7 +225,7 @@ class Estadisticas:
                     print(f"\n{carrera}: ${promedio:.2f}\n")
             elif opcion == "2":
                 asistencia_ordenada = estadisticas.estadisticas_asistencia()
-                self.grafico_asistencia(estadisticas, asistencia_ordenada)
+              
             elif opcion == "3":
                 # Llama al método carrera_mayor_asistencia() y muestra el resultado
                 carrera_con_mayor_asistencia = estadisticas.carrera_mayor_asistencia()
@@ -250,4 +250,4 @@ class Estadisticas:
                 print("Saliendo del menú de estadísticas...")
                 menu_estat=False
             else:
-                print("Opción inválida")
+               menu_estat=False

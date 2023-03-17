@@ -7,3 +7,5 @@ Felipe ,5654,39,São Paulo Grand Prix,vip,197.2
 asd,5,45,Miami Grand Prix,general,87.0
 a,45546,4564,Miami Grand Prix,general,174.0
 fe,4,45,Azerbaijan Grand Prix,general,87.0
+Felipe,26573457,20,Abu Dhabi Grand Prix,vip,394.4
+felioe,23423,24,Bahrain Grand Prix,general,174.0
