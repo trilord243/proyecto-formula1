@@ -10,9 +10,6 @@ from clases.Piloto import Piloto
 import random
 
 
-
-
-
 #Esta clase app contiene la aplicacion del modulo 1
 class Gestion_carrera:
     def __init__(self):
@@ -58,6 +55,8 @@ class Gestion_carrera:
                 #Esribiendo los datos en el archivo constructor.txt
                 archivo.write(f"{constructor.nombre},{constructor.id},{constructor.nacionalidad}, {constructor.pilotos_ref[0]},{constructor.pilotos_ref[1]} \n")
                 
+        
+        
                 
     # Funcion que registra los datos del api en el pilotos.txt
     def registrar_pilotos(self):
@@ -84,6 +83,8 @@ class Gestion_carrera:
                 archivo.write(f"{piloto.nombre},{piloto.apellido},{piloto.fecha_nacimiento},{piloto.lugar_nacimiento},{piloto.numero},{piloto.id} \n")
             
     
+
+
 
     # Función para registrar carreras
     def registrar_carreras(self):
@@ -169,6 +170,7 @@ class Gestion_carrera:
 
 
 
+
     #Busca los pilotos por constructor. Donde recibe por parametro el constructor
     def buscar_pilotos_por_constructor(self,a):
         #Creo una lista vacia para guardar los datos de los constructores
@@ -219,6 +221,7 @@ class Gestion_carrera:
                     
                     Nacionalidad: {pilotos[3]}
                                   """ )
+    
     
     
     
@@ -278,7 +281,7 @@ class Gestion_carrera:
                 print(f"Longitud: {carreras_dict[i]['circuit']['location']['long']}")
           
           
-                
+    #Metodo que imprime todas las carreras disponibles         
     def imprimir_carreras(self):
         carreras_dict=self.api_carreras.obtener_carreras()
         dict_carreras = {}
@@ -472,13 +475,13 @@ class Gestion_carrera:
             self.registrar_pilotos()
             self.registrar_carreras()
             self.registrar_circuitos()
-            print("Bienvenido al primer modulo del programa de Formula 1 !\n")
+            print("Bienvenido al primer modulo de Gestion de carrerra y equipo de Formula 1 !\n")
             print("Seleccione una opcion para lo que desea realizar:\n")
             print("1. Buscar constructores por país")
             print("2. Buscar pilotos por constructor")
             print("3. Buscar carreras por país")
             print("4. Buscar carreras por mes")
-            print("5. Finalizar carrera y asignar puntos")
+            print("5. Finalizar carrera y asignar puntos\n")
             
             opcion=input("Escriba la opcion: ")
             if opcion=="1":
@@ -496,7 +499,7 @@ class Gestion_carrera:
             elif opcion == "5":
                 carrera_numero = input("Ingrese el número de la carrera a finalizar: ")
                 while not carrera_numero.isdigit() :
-                    carrera_numero=input("Ingrese un valor numericoo numero de carrera ")
+                    carrera_numero=input("Ingrese un valor numerico numero de carrera")
                 data=int(carrera_numero)
                 if not data > len(self.carreras):
                     self.finalizar_carrera(data)
