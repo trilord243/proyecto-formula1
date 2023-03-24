@@ -9,3 +9,5 @@ a,45546,4564,Miami Grand Prix,general,174.0
 fe,4,45,Azerbaijan Grand Prix,general,87.0
 Felipe,26573457,20,Abu Dhabi Grand Prix,vip,394.4
 felioe,23423,24,Bahrain Grand Prix,general,174.0
+Felipe,456,45,Australian Grand Prix,vip,197.2
+Felipe,89,45,Saudi Arabian Grand Prix,general,87.0

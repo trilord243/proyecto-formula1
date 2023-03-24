@@ -2,7 +2,7 @@
 from apis.ApiCarreras import ApiCarreras
 from apis.ApiConstructores import ApiConstructores
 from apis.ApiPilotos import ApiPilotos
-#Llamando a las clases del proyecto
+#Llamando a las clases del proyecto 
 from clases.Carrera import Carrera
 from clases.Circuito import Circuito
 from clases.Constructor import Constructor
@@ -10,50 +10,34 @@ from clases.Piloto import Piloto
 import random
 
 
-# Crear instancias de las APIs con sus respectivas clases y endpoints
-api_constructores = ApiConstructores('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/constructors.json')
-api_pilotos = ApiPilotos('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/drivers.json')
-api_carreras = ApiCarreras('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json')
-
-
-# Lista de constructores registrados
-constructores = []
-
-# Lista de pilotos registrados
-pilotos = []
-
-# Lista de carreras registradas
-
-
-# Lista de circuitos registrados
-circuito = []
-
-
-carreras = []
-
-
-
-
 
 
 
 #Esta clase app contiene la aplicacion del modulo 1
 class Gestion_carrera:
-    
+    def __init__(self):
+        # Crear instancias de las APIs con sus respectivas clases y endpoints
+        self.api_constructores = ApiConstructores('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/constructors.json')
+        self.api_pilotos = ApiPilotos('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/drivers.json')
+        self.api_carreras = ApiCarreras('https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json')
+        # Lista de carreras registradas
+        self.carreras = []
+        # Lista de constructores registrados
+        self.constructores = []
+        # Lista de circuitos registrados
+        self.circuito = []
+        # Lista de pilotos registrado
+        self.pilotos = []
         
         
-  
-    
-    
-    
-    
+        
     
     #Funcion que registra los datos del api en el constructor.txt
     def registrar_constructores(self):
         #Llamando a las api de constructor 
-        constructores_api = api_constructores.obtener_constructores()
+        constructores_api = self.api_constructores.obtener_constructores()
         #Llamando a la api de los pilotos
-        pilotos_api = api_pilotos.obtener_pilotos()
+        pilotos_api = self.api_pilotos.obtener_pilotos()
         
         #Creando y abriendo el txt de constructores.txt
         with open('datos/constructor.txt', 'w') as archivo:
@@ -70,7 +54,7 @@ class Gestion_carrera:
                 #Asignandole valores a los atributos de la clase Constructor
                 constructor = Constructor(id_constructor,name,nationality,team)
                 #Guardo los datos en una lista constructorres
-                constructores.append(constructor)
+                self.constructores.append(constructor)
                 #Esribiendo los datos en el archivo constructor.txt
                 archivo.write(f"{constructor.nombre},{constructor.id},{constructor.nacionalidad}, {constructor.pilotos_ref[0]},{constructor.pilotos_ref[1]} \n")
                 
@@ -78,7 +62,7 @@ class Gestion_carrera:
     # Funcion que registra los datos del api en el pilotos.txt
     def registrar_pilotos(self):
         #Llamando el api de pilotos
-        pilotos_api = api_pilotos.obtener_pilotos()
+        pilotos_api = self.api_pilotos.obtener_pilotos()
       
        #Creando y abriendo el txt de pilotos.txt
         with open('datos/pilotos.txt', 'w') as archivo:
@@ -95,7 +79,7 @@ class Gestion_carrera:
                 #Asignandole valores a los atributos
                 piloto = Piloto(firstName, lastName, dateOfBirth, nationality, permanentNumber,piloto_id)
                 #Guardo los datos en una lista pilotos
-                pilotos.append(piloto)
+                self.pilotos.append(piloto)
                 #Esribiendo los datos en el archivo pilotos.txt
                 archivo.write(f"{piloto.nombre},{piloto.apellido},{piloto.fecha_nacimiento},{piloto.lugar_nacimiento},{piloto.numero},{piloto.id} \n")
             
@@ -104,7 +88,7 @@ class Gestion_carrera:
     # Función para registrar carreras
     def registrar_carreras(self):
         #Llamando a las apis correspondientes
-        carreras_api = api_carreras.obtener_carreras()
+        carreras_api = self.api_carreras.obtener_carreras()
         
         #Creando y abriendo el txt de carreras.txt
         with open("datos/carreras.txt", "w") as archivo:
@@ -119,7 +103,7 @@ class Gestion_carrera:
                 #Asignandole valores a los atributos
                 carrera = Carrera(nombre, numero, fecha,id_carrera)
                 #Guardo los datos en una lista carreras
-                carreras.append(carrera)
+                self.carreras.append(carrera)
                 # Escribir los datos de la carrera en el archivo carreras.txt
                 archivo.write(f"{carrera.nombre},{carrera.numero},{carrera.fecha},{carrera.circuito}\n")
         
@@ -132,7 +116,7 @@ class Gestion_carrera:
     # Función para registrar circuitos
     def registrar_circuitos(self):
         #Llamando a las apis correspondientes
-        circuitos_api=api_carreras.obtener_carreras()
+        circuitos_api=self.api_carreras.obtener_carreras()
         #Creando y abriendo el txt de carreras.txt
         with open("datos/circuitos.txt", "w") as archivo:
             #Recorriendo el api de carreras
@@ -145,7 +129,7 @@ class Gestion_carrera:
                 #Asignandole valores a los atributo
                 circuitos=Circuito(nombre,pais,localidad,latitud_longitud)
                 #Guardo los datos en una lista carreras
-                circuito.append(circuitos)
+                self.circuito.append(circuitos)
                 # Escribir los datos de la carrera en el archivo circuitos.txt
                 archivo.write(f" {circuitos.nombre}, {circuitos.pais}, {circuitos.localidad}, {circuitos.latitud_longitud}\n")
             
@@ -173,6 +157,7 @@ class Gestion_carrera:
                 #Si el pais que esta almacenado en el archivo.txt es igual al pais recibido por parametro Va a imprimir los datos de los constructores
                 if constructor[2].lower() == pais.lower():
                     constructores_encontrados = True
+                    print("\n")
                     print(f"Constructor: {constructor[0]}")
                     print(f"Alias: {constructor[1]}")
                     print(f"Pilotos: {constructor[3]} y {constructor[4]}")
@@ -184,7 +169,7 @@ class Gestion_carrera:
 
 
 
-
+    #Busca los pilotos por constructor. Donde recibe por parametro el constructor
     def buscar_pilotos_por_constructor(self,a):
         #Creo una lista vacia para guardar los datos de los constructores
         constructor_dict = {}
@@ -208,27 +193,44 @@ class Gestion_carrera:
                         pilotos = lineas.strip().split(',')
                         #Si el valor del diccionario es igual al piloto del value que estan registradors los pilotos del diccionario entonces se imprime los valores del pilotos que se estan buscando 
                         if pilotos[5] in value[0]:
-                            print(f"""Piloto1 
+                            print(f"""
+                    
+                    Piloto1 
                                   
-                                 nombre: {pilotos[0]} 
-                                 apellido: {pilotos[1]}
-                                 fecha de nacimiento: {pilotos[2]}
-                                 nacionalidad: {pilotos[3]}
+                    Nombre: {pilotos[0]} 
+                    
+                    Apellido: {pilotos[1]}
+                    
+                    Fecha de nacimiento: {pilotos[2]}
+                    
+                    Nacionalidad: {pilotos[3]}
                                   """ )
                             #Se imprime los datos de otro piloto que esta en esa lista 
                         if pilotos[5] in value[1]:
-                             print(f"""Piloto2
-                                 nombre: {pilotos[0]} 
-                                 apellido: {pilotos[1]}
-                                 fecha_nacimiento: {pilotos[2]}
-                                 nacionalidad: {pilotos[3]}
+                             print(f"""
+                    
+                    Piloto2
+                    
+                    Nombre: {pilotos[0]} 
+                    
+                    Apellido: {pilotos[1]}
+                    
+                    Fecha_nacimiento: {pilotos[2]}
+                    
+                    Nacionalidad: {pilotos[3]}
                                   """ )
+    
+    
+    
+    #Funcion que imprime todos los pilotos 
     def imprimir_pilotos(self):
         mensaje = """\n Bienvenido, aqui esta la lista de paises disponibles para buscar los constructores
             Selecione el numero del pais o escriba pais exactamente como se te esta dando 
         \n """
         print(mensaje)
+        #Crear un diccionario vacio para guardad los constructores
         dict_construcores_numero = {}
+        #Abir el archivo constructor.txt
         with open('datos/constructor.txt') as f:
             contador = 0
             #Leer todas las lineas del constructor.txt y almacena una lista llamada
@@ -263,20 +265,22 @@ class Gestion_carrera:
     #Funcion que busca las carreras por pais. Donde recibe por parametro el pais 
     def buscar_carreras_por_pais(self,pais):
         #Se llama a la api de carreras 
-        carreras_dict=api_carreras.obtener_carreras()
+        carreras_dict=self.api_carreras.obtener_carreras()
         #Se recorre el diccionario para encontrar las carreras
         for i in range(len(carreras_dict)):
             #Si El pais recibido por parametro es igual al pais de la carrera Entonces imprime los datos de la carrera
             if carreras_dict[i]["circuit"]['location']['country'].lower() == pais.lower():
-                
+                print("\n")
                 print(f"Carrera: {carreras_dict[i]['circuit']['name']}")
                 
                 print(f"Localidad: {carreras_dict[i]['circuit']['location']['locality']}")
                 print(f"Latitud: {carreras_dict[i]['circuit']['location']['lat']}")
                 print(f"Longitud: {carreras_dict[i]['circuit']['location']['long']}")
+          
+          
                 
     def imprimir_carreras(self):
-        carreras_dict=api_carreras.obtener_carreras()
+        carreras_dict=self.api_carreras.obtener_carreras()
         dict_carreras = {}
         contador=0
         for i in range(len(carreras_dict)):
@@ -312,7 +316,7 @@ class Gestion_carrera:
     #Funcion que busca los datos de la carrera por mes. Que recibe por parametro el mes
     def buscar_carreras_por_mes(self,mes):
         #Llamar el api de carreras
-        carreras_dict=api_carreras.obtener_carreras()
+        carreras_dict=self.api_carreras.obtener_carreras()
         
         
         #Recorrer la lista de carreras
@@ -333,6 +337,7 @@ class Gestion_carrera:
                       
                 
                       """)
+                break
             elif int(partes[1])!=mes:
                 print("No existe la carrera")
                 break
@@ -426,9 +431,11 @@ class Gestion_carrera:
         elif type(data) == str:
             return data
         
+        
     def finalizar_carrera(self,carrera_numero):
         # Selecciona 10 pilotos al azar y les asigna una posición
-        pilotos_seleccionados = random.sample(pilotos, 10)
+        pilotos_seleccionados = random.sample(self.pilotos, 10)
+        #Con el metodo sort como parametro en la key vamos a ordernar los púntos de los pilotos "x.puntos" y los ponemos de posicion acendente
         pilotos_seleccionados.sort(key=lambda x: x.puntos, reverse=True)
 
         # Asigna puntos a los pilotos según su posición
@@ -438,12 +445,12 @@ class Gestion_carrera:
             piloto.guardar_datos()
 
             # Encuentra y actualiza el constructor al que pertenece el piloto
-            for constructor in constructores:
+            for constructor in self.constructores:
                 if piloto.id in constructor.pilotos_ref:
                     constructor.agregar_puntos(puntos[i])
                     constructor.guardar_datos()
         
-        for carrera in carreras:
+        for carrera in self.carreras:
             if carrera.numero == carrera_numero:
                 carrera.podium = [piloto.id for piloto in pilotos_seleccionados[:3]]
                 carrera.guardar_datos()
@@ -454,9 +461,11 @@ class Gestion_carrera:
             print(f"{i + 1}. {pilotos_seleccionados[i].nombre} {pilotos_seleccionados[i].apellido} - {puntos[i]} puntos")   
        
        
-       
+    #Menu principal
     def start(self):
+        #validacion de menu
         menu_val = True
+        #Para volver al menu inical
         volver_al_menu_principal = False
         while menu_val:
             self.registrar_constructores()
@@ -486,16 +495,20 @@ class Gestion_carrera:
                 self.buscar_carreras_por_mes(mes)
             elif opcion == "5":
                 carrera_numero = input("Ingrese el número de la carrera a finalizar: ")
-                while not carrera_numero.isdigit():
-                    carrera_numero=input("Ingrese un valor numerico: ")
+                while not carrera_numero.isdigit() :
+                    carrera_numero=input("Ingrese un valor numericoo numero de carrera ")
                 data=int(carrera_numero)
-                self.finalizar_carrera(data)
+                if not data > len(self.carreras):
+                    self.finalizar_carrera(data)
+                else:
+                    print("No existe la carrera")
             else:
+                
                 print("Opción no válida. Regresando al menú principal.")
                 menu_val = False
                 volver_al_menu_principal = True  
 
-        return volver_al_menu_principal  # Asegurarse de que el 'return' esté fuera del bucle 'while'
+        return volver_al_menu_principal  
 
                     
                 
@@ -503,8 +516,7 @@ class Gestion_carrera:
                 
             
             
+
             
-            
-        
         
         

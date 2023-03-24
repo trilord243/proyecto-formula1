@@ -8,18 +8,14 @@ class Venta_entradas:
         self.url = "https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json"
         self.carreras = self.cargar_carreras()
 
+
     def cargar_carreras(self):
-        try:
-            response = requests.get(self.url)
-            if response.status_code == 200:
-                carreras = json.loads(response.text)
-                return carreras
-            else:
-                print("Error al obtener carreras desde la API")
-                return []
-        except Exception as e:
-            print("Error al cargar carreras:", e)
-            return []
+        response = requests.get(self.url)
+        carreras = json.loads(response.text)
+        return carreras
+                    
+
+
     def cargar_asientos_disponibles(self, carrera):
         try:
             with open(f"datos/asientos_{carrera}.txt", "r") as archivo_asientos:
@@ -29,6 +25,20 @@ class Venta_entradas:
         except FileNotFoundError:
             return []
         
+    
+    
+    
+    def asiento_disponible(self, carrera, fila, asiento):
+        asientos_ocupados = self.cargar_asientos_disponibles(carrera)
+        return (fila, asiento) not in asientos_ocupados
+    
+    def asiento_en_rango(self, carrera, fila, asiento, tipo_entrada):
+        filas, columnas = self.carreras[carrera]['map'][tipo_entrada]
+        return 0 <= fila < filas and 0 <= asiento < columnas
+   
+    
+    
+        
         
     def registrar_asiento(self, carrera, fila, asiento):
         with open(f"datos/asientos_{carrera}.txt", "a") as archivo_asientos:
@@ -37,7 +47,19 @@ class Venta_entradas:
         for i, carrera in enumerate(self.carreras):
             print(f"{i + 1}. {carrera['name']} - {carrera['date']} - {carrera['circuit']['name']}")
     
+    
+    def todos_asientos_ocupados(self, carrera, tipo_entrada):
+        filas, columnas = self.carreras[carrera]['map'][tipo_entrada]
+        asientos_totales = filas * columnas
+        asientos_ocupados = len(self.cargar_asientos_disponibles(self.carreras[carrera]['name']))
+        
+        return asientos_ocupados >= asientos_totales
+
+    
     def mostrar_asientos_disponibles(self, carrera, tipo_entrada):
+        if self.todos_asientos_ocupados(carrera, tipo_entrada):
+            return 
+
         filas, columnas = self.carreras[carrera]['map'][tipo_entrada]
         asientos_ocupados = self.cargar_asientos_disponibles(self.carreras[carrera]['name'])
 
@@ -49,6 +71,7 @@ class Venta_entradas:
                 else:
                     print("[X]", end=" ")
             print()
+
 
     def obtener_datos_cliente(self):
         nombre = input("Ingrese su nombre: ")
@@ -146,47 +169,62 @@ class Venta_entradas:
             else:
                 print("Por favor, ingrese 'general' o 'vip'.")
         self.mostrar_asientos_disponibles(carrera_seleccionada, tipo_entrada)
-       
-       
-       
-       
-       
-        menu_fila=True
-        while menu_fila:
-            try:
-                fila = int(input("Ingrese el número de fila del asiento que desea comprar: ")) - 1
-                menu_fila = False
-            except ValueError:
-                print("Por favor, ingrese un valor numérico.")
-        menu_asiento=True
-        while menu_asiento:
-            try:
-                asiento = int(input("Ingrese el número de asiento que desea comprar: ")) - 1
-                menu_asiento=False
-            except ValueError:
-                print("Por favor, ingrese un valor numérico.")
-
-        self.registrar_asiento(self.carreras[carrera_seleccionada]['name'], fila, asiento)
+        cerrar_menu = self.todos_asientos_ocupados(carrera_seleccionada, tipo_entrada)
         
-        # Aquí puedes implementar la selección de asientos y la generación del token
-
-        subtotal, descuento, iva, total = self.calcular_costo_entrada(tipo_entrada, cliente.cedula)
-        print(f"Subtotal: ${subtotal:.2f}")
-        print(f"Descuento: ${subtotal * (1 - descuento):.2f}")
-        print(f"IVA: ${iva:.2f}")
-        print(f"Total: ${total:.2f}")
-
-        confirmar_compra = input("¿Desea proceder a pagar la entrada? (S/N): ").lower()
-        if confirmar_compra == 's':
-            token = self.generar_token()
-
-            venta_info = f"{cliente.nombre},{cliente.cedula},{cliente.edad},{self.carreras[carrera_seleccionada]['name']},{tipo_entrada},{total}"
-            self.guardar_venta(venta_info)
-
-            token_info = f"{token},{cliente.nombre},{cliente.cedula},{self.carreras[carrera_seleccionada]['name']},{tipo_entrada},{total}"
-            self.guardar_token(token_info)
-
-            print("Pago exitoso.")
-            print(f"Su token de entrada es: {token}")  # Muestra el token al cliente
+        if cerrar_menu:
+            print("No hay asientos disponibles, saliendo del menú.")
         else:
-            print("Compra cancelada.")
+            asiento_disponible = False
+            
+        
+            while not asiento_disponible:
+                menu_fila=True
+                while menu_fila:
+                    try:
+                        fila = int(input("Ingrese el número de fila del asiento que desea comprar: ")) - 1
+                        menu_fila = False
+                    except ValueError:
+                        print("Por favor, ingrese un valor numérico.")
+                menu_asiento=True
+                while menu_asiento:
+                    try:
+                        asiento = int(input("Ingrese el número de asiento que desea comprar: ")) - 1
+                        menu_asiento=False
+                    except ValueError:
+                        print("Por favor, ingrese un valor numérico.")
+                    
+                if self.asiento_en_rango(carrera_seleccionada, fila, asiento, tipo_entrada):
+                    if self.asiento_disponible(self.carreras[carrera_seleccionada]['name'], fila, asiento):
+                        asiento_disponible = True
+                    else:
+                        print("El asiento seleccionado no está disponible. Por favor, elija otro asiento.")
+                        self.mostrar_asientos_disponibles(carrera_seleccionada, tipo_entrada)
+                else:
+                    print("El asiento seleccionado no está dentro del rango permitido. Por favor, elija otro asiento.")
+                    self.mostrar_asientos_disponibles(carrera_seleccionada, tipo_entrada)
+
+
+            self.registrar_asiento(self.carreras[carrera_seleccionada]['name'], fila, asiento)
+            
+            # Aquí puedes implementar la selección de asientos y la generación del token
+
+            subtotal, descuento, iva, total = self.calcular_costo_entrada(tipo_entrada, cliente.cedula)
+            print(f"Subtotal: ${subtotal:.2f}")
+            print(f"Descuento: ${subtotal * (1 - descuento):.2f}")
+            print(f"IVA: ${iva:.2f}")
+            print(f"Total: ${total:.2f}")
+
+            confirmar_compra = input("¿Desea proceder a pagar la entrada? (S/N): ").lower()
+            if confirmar_compra == 's':
+                token = self.generar_token()
+
+                venta_info = f"{cliente.nombre},{cliente.cedula},{cliente.edad},{self.carreras[carrera_seleccionada]['name']},{tipo_entrada},{total}"
+                self.guardar_venta(venta_info)
+
+                token_info = f"{token},{cliente.nombre},{cliente.cedula},{self.carreras[carrera_seleccionada]['name']},{tipo_entrada},{total}"
+                self.guardar_token(token_info)
+
+                print("Pago exitoso.")
+                print(f"Su token de entrada es: {token}")  # Muestra el token al cliente
+            else:
+                print("Compra cancelada.")
