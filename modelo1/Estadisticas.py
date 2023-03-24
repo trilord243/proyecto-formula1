@@ -6,14 +6,12 @@ class Estadisticas:
         self.archivo_ventas = archivo_ventas
         self.archivo_tokens = archivo_tokens
         self.costo_entrada_vip = 340
-        self.API_URL = "https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json"
+        self.url = "https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json"
         self.races_data = []
-
-
 
     def cargar_datos(self):
         # Cargar datos de la API
-        response = requests.get(self.API_URL)
+        response = requests.get(self.url)
         self.races_data = response.json()
         
     
@@ -31,7 +29,7 @@ class Estadisticas:
 
         carrera_mayor_boletos_vendidos = max(boletos_vendidos, key=boletos_vendidos.get)
         return carrera_mayor_boletos_vendidos
-
+    
     def estadisticas_asistencia(self):
         asistencia = {}
         for race in self.races_data:
@@ -88,7 +86,7 @@ class Estadisticas:
         top_productos = sorted(productos_vendidos.items(), key=lambda x: x[1], reverse=True)
         return top_productos[:3]
  
-    def carrera_mayor_asistencia(self):
+    def carreras_ordenadas_por_asistencia(self):
         asistencia = {}
         for race in self.races_data:
             race_name = race["name"]
@@ -101,10 +99,61 @@ class Estadisticas:
                 if campos[6] == "Asistirá":
                     asistencia[race_name] += 1
 
-        carrera_mayor_asistencia = max(asistencia, key=asistencia.get)
-        return carrera_mayor_asistencia
+        asistencia_ordenada = dict(sorted(asistencia.items(), key=lambda x: x[1], reverse=True))
+        return asistencia_ordenada
 
- 
+    
+    def carrera_mayor_asistencia(self):
+        asistencia_ordenada = self.carreras_ordenadas_por_asistencia()
+        carrera_con_mayor_asistencia = next(iter(asistencia_ordenada))
+        return carrera_con_mayor_asistencia
+
+    def carreras_ordenadas_por_boletos_vendidos(self):
+        boletos_vendidos = {}
+        for race in self.races_data:
+            race_name = race["name"]
+            boletos_vendidos[race_name] = 0
+
+        with open("datos/tokens.txt", "r") as tokens_file:
+            for linea in tokens_file:
+                campos = linea.strip().split(',')
+                race_name = campos[3]
+                boletos_vendidos[race_name] += 1
+
+        boletos_vendidos_ordenados = dict(sorted(boletos_vendidos.items(), key=lambda x: x[1], reverse=True))
+        return boletos_vendidos_ordenados
+    
+    def carrera_mayor_boletos_vendidos(self):
+        boletos_vendidos_ordenados = self.carreras_ordenadas_por_boletos_vendidos()
+        carrera_con_mayor_boletos_vendidos = next(iter(boletos_vendidos_ordenados))
+        return carrera_con_mayor_boletos_vendidos
+
+    def clientes_ordenados_por_ventas(self):
+        venta_clientes = {}
+        with open("datos/ventas_realizadas,txt", "r") as ventas_file:
+            for linea in ventas_file:
+                campos=linea.strip().split(',')
+       
+    def productos_ordenados_por_ventas(self):
+        ventas_productos = {}
+
+        with open("datos/ventas_realizadas.txt", "r") as ventas_file:
+            for linea in ventas_file:
+                campos = linea.strip().split(',')
+                producto = campos[1]
+                cantidad = float(campos[3])
+
+                if producto in ventas_productos:
+                    ventas_productos[producto] += cantidad
+                else:
+                    ventas_productos[producto] = cantidad
+
+        ventas_productos_ordenados = dict(sorted(ventas_productos.items(), key=lambda x: x[1], reverse=True))
+        return ventas_productos_ordenados
+
+    
+    
+    
     def calcular_promedio_gasto_vip_por_carrera(self):
         gastos_por_carrera = {}
         gastos_totales_por_cedula = {}
@@ -169,37 +218,86 @@ class Estadisticas:
 
         plt.bar(carreras, promedios)
         plt.xlabel('Carreras')
-        plt.ylabel('Promedio de gasto VIP')
+        plt.ylabel('Gasto promedio en $')
         plt.title('Promedio de gasto VIP por carrera')
+        plt.subplots_adjust(bottom=0.37)
         plt.xticks(rotation=90)
         plt.show()
     
-    
-
-
-
-    def grafico_mayor_asistencia(self, asistencia_ordenada):
+    def grafico_relacion_asistencia_venta_por_carrera(self, asistencia_ordenada):
         carreras = [race_name for race_name, stats in asistencia_ordenada]
-        asistentes = [stats["personas_asistieron"] for race_name, stats in asistencia_ordenada]
+        relaciones_asistencia_venta = [stats["relacion_asistencia_venta"] for race_name, stats in asistencia_ordenada]
 
         plt.figure(figsize=(12, 6))
-        plt.bar(carreras, asistentes)
+        plt.bar(carreras, relaciones_asistencia_venta)
         plt.xlabel('Carreras')
-        plt.ylabel('Asistentes')
-        plt.title('Asistencia por carrera')
+        plt.ylabel('Relación asistencia/venta')
+        plt.title('Relación asistencia/venta por carrera')
+        plt.subplots_adjust(bottom=0.37)
         plt.xticks(rotation=90)
         plt.show()
 
-    def grafico_top_productos(self,estadisticas):
-        top_3_productos = estadisticas.top_productos_vendidos()
-        productos = [producto[0] for producto in top_3_productos]
-        ventas = [producto[1] for producto in top_3_productos]
+    def grafico_carreras_mayor_asistencia(self):
+        asistencia_ordenada = self.carreras_ordenadas_por_asistencia()
+        carreras = list(asistencia_ordenada.keys())
+        asistencias = list(asistencia_ordenada.values())
 
-        plt.bar(productos, ventas)
-        plt.xlabel('Productos')
-        plt.ylabel('Ventas')
-        plt.title('Top 3 productos más vendidos en el restaurante')
+        plt.figure(figsize=(12, 6))
+        plt.bar(carreras, asistencias)
+        plt.xlabel('Carreras')
+        plt.ylabel('Asistencia')
+        plt.title('Asistencia por carrera (de mayor a menor)')
+        plt.subplots_adjust(bottom=0.37)
+        plt.xticks(rotation=90)
         plt.show()
+
+
+    def grafico_carreras_mayor_boletos_vendidos(self):
+        boletos_vendidos_ordenados = self.carreras_ordenadas_por_boletos_vendidos()
+        carreras = list(boletos_vendidos_ordenados.keys())
+        cantidad_boletos = list(boletos_vendidos_ordenados.values())
+
+        plt.figure(figsize=(12, 6))
+        plt.bar(carreras, cantidad_boletos)
+        plt.xlabel('Carreras')
+        plt.ylabel('Cantidad de boletos vendidos')
+        plt.title('Carreras con mayor cantidad de boletos vendidos')
+        plt.subplots_adjust(bottom=0.37)
+        plt.xticks(rotation=90)
+        plt.show() 
+
+
+        
+    def grafico_productos_mayor_ventas(self):
+        ventas_productos_ordenados = self.productos_ordenados_por_ventas()
+        productos = list(ventas_productos_ordenados.keys())
+        cantidad_vendida = list(ventas_productos_ordenados.values())
+
+        plt.figure(figsize=(12, 6))
+        plt.bar(productos, cantidad_vendida)
+        plt.xlabel('Productos')
+        plt.ylabel('Cantidad vendida')
+        plt.title('Productos con mayor cantidad vendida en el restaurante')
+        plt.subplots_adjust(bottom=0.25)
+        plt.xticks(rotation=45)
+        plt.show()
+    
+    
+    def grafico_top_3_clientes(self):
+        top_clientes = self.top_3_clientes()
+        nombres = []
+        frecuencias = []
+        for cliente, frecuencia in top_clientes:
+            nombres.append(cliente)
+            frecuencias.append(frecuencia)
+
+        plt.bar(nombres, frecuencias)
+        plt.xlabel("Clientes")
+        plt.ylabel("Frecuencia")
+        plt.title("Top 3 clientes")
+        plt.show()
+
+    
     
     def start(self):
         estadisticas = Estadisticas()
@@ -225,11 +323,12 @@ class Estadisticas:
                     print(f"\n{carrera}: ${promedio:.2f}\n")
             elif opcion == "2":
                 asistencia_ordenada = estadisticas.estadisticas_asistencia()
+                estadisticas.grafico_relacion_asistencia_venta_por_carrera(asistencia_ordenada)
               
             elif opcion == "3":
-                # Llama al método carrera_mayor_asistencia() y muestra el resultado
                 carrera_con_mayor_asistencia = estadisticas.carrera_mayor_asistencia()
                 print("\nLa carrera con mayor asistencia fue:", carrera_con_mayor_asistencia)
+                estadisticas.grafico_carreras_mayor_asistencia()
                 
                
                 
@@ -237,15 +336,19 @@ class Estadisticas:
             elif opcion == "4":
                 carrera_con_mayor_boletos_vendidos = estadisticas.carrera_mayor_boletos_vendidos()
                 print("\nLa carrera con mayor cantidad de boletos vendidos fue:", carrera_con_mayor_boletos_vendidos)
+                estadisticas.grafico_carreras_mayor_boletos_vendidos()
             elif opcion == "5":
                 top_3_productos = estadisticas.top_productos_vendidos()
                 print("\nTop 3 productos más vendidos en el restaurante:\n")
+                estadisticas.grafico_productos_mayor_ventas()
                 for i, producto in enumerate(top_3_productos, 1):
                     print(f"\n{i}. {producto[0]}: {producto[1]} ventas\n")
             elif opcion == "6":
                 top_clientes = estadisticas.top_3_clientes()
                 for cedula, boletos_comprados in top_clientes:
                     print(f"\nLa cédula {cedula} compró {boletos_comprados} boletos.\n")
+                estadisticas.grafico_top_3_clientes()
+                
             elif opcion == "0":
                 print("Saliendo del menú de estadísticas...")
                 menu_estat=False

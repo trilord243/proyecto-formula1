@@ -13,3 +13,4 @@ b4da7fff-8632-453e-b80d-07e0c8c06514,fe,4,Azerbaijan Grand Prix,general,87.0,Asi
 56a224c6-99d6-4029-87ef-e2bb7a6ced87,felioe,23423,Bahrain Grand Prix,general,174.0,No asistirá
 380115fc-a0c2-4ef6-b387-f754353b8c69,Felipe,456,Australian Grand Prix,vip,197.2,Asistirá
 dacdc8e1-1f7b-4d3e-ad8f-48bbf1dc9be3,Felipe,89,Saudi Arabian Grand Prix,general,87.0,Asistirá
+c2f4f5af-1496-4090-bf22-92854b4cb137,Felipe,154,United States Grand Prix,vip,394.4,Asistirá

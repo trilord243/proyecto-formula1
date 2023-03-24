@@ -1,38 +1,42 @@
 import requests
+from clases.Cliente import Cliente
+from clases.Producto import Producto
 
 class Ventas_Restaurantes:
 
     def __init__(self):
-        self.inventario = {}  # Para almacenar el inventario de productos
-        self.clientes = {}  # Para almacenar los datos de los clientes
-        self.clientes_edad = {}  # Para almacenar la edad de los clientes según su cédula
-        self.ventas = []  # Para almacenar las ventas realizadas
-        self.API_URL = "https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json"
+        self.inventario = {}
+        self.clientes = {}
+        self.ventas = []
+        self.url = "https://raw.githubusercontent.com/Algorimtos-y-Programacion-2223-2/api-proyecto/main/races.json"
         self.races_data = []
 
     def cargar_datos(self):
-        # Cargar datos de la API
-        response = requests.get(self.API_URL)
+        response = requests.get(self.url)
         self.races_data = response.json()
         for race in self.races_data:
             for restaurant in race["restaurants"]:
-                self.inventario[restaurant["name"]] = restaurant["items"]
+                self.inventario[restaurant["name"]] = [Producto(item["name"], item["type"], float(item["price"])) for item in restaurant["items"]]
+                
 
-        # Cargar datos de tokens.txt
         with open("datos/tokens.txt", "r") as tokens_file:
             for linea in tokens_file:
                 campos = linea.strip().split(",")
                 cedula = campos[2]
                 tipo_entrada = campos[4]
-                self.clientes[cedula] = tipo_entrada
+                self.clientes[cedula] = Cliente(None, cedula, None)
+                if tipo_entrada == "vip":
+                    self.clientes[cedula].vip = True
+                else:
+                    self.clientes[cedula].vip = False
 
-        # Cargar datos de ventas.txt
         with open("datos/ventas.txt", "r") as ventas_file:
             for linea in ventas_file:
                 campos = linea.strip().split(",")
                 cedula = campos[1]
                 edad = int(campos[2])
-                self.clientes_edad[cedula] = edad
+                if cedula in self.clientes:
+                    self.clientes[cedula].edad = edad
 
     def obtener_carrera_cliente(self, cedula):
         with open("datos/ventas.txt", "r") as ventas_file:
@@ -43,9 +47,11 @@ class Ventas_Restaurantes:
                 if cedula_ventas == cedula:
                     return carrera
         return None
+
     def es_cliente_vip(self, cedula):
-        return self.clientes.get(cedula) == "vip"
-    
+        cliente = self.clientes.get(cedula)
+        return cliente and cliente.vip
+
     def mostrar_productos_disponibles(self, carrera_cliente):
         self.productos_numerados = {}
         indice = 1
@@ -55,19 +61,21 @@ class Ventas_Restaurantes:
                 for restaurant in race["restaurants"]:
                     print("\nRestaurante {}:".format(restaurant["name"]))
                     for item in restaurant["items"]:
-                        print("{} - {} - ${}".format(indice, item["name"], item["price"]))
-                        self.productos_numerados[indice] = item
+                        producto = Producto(item["name"], item["type"], float(item["price"]))  # Asegúrate de convertir el precio a float
+                        print("{} - {}".format(indice, producto))
+                        self.productos_numerados[indice] = producto
                         indice += 1
+
     def realizar_compra(self, cedula, productos):
-        if not self.es_cliente_vip(cedula):
+        cliente = self.clientes.get(cedula)
+        if not cliente or not cliente.vip:
             print("Lo sentimos, solo los clientes VIP pueden realizar compras en el restaurante.")
             return
 
-        edad_cliente = self.clientes_edad.get(cedula)
-        if edad_cliente is not None and edad_cliente < 18:
-            productos = [p for p in productos if not (p["type"].startswith("drink") and "alcoholic" in p["type"])]
+        if cliente.edad is not None and cliente.edad < 18:
+             productos = [p for p in productos if not (p.product_type.startswith("drink") and "alcoholic" in p.product_type)]
 
-        subtotal = sum(float(p["price"]) for p in productos)
+        subtotal = sum(p.price for p in productos)
         descuento = (0.15 * subtotal) if self.es_numero_perfecto(int(cedula)) else 0
         total = subtotal - descuento
 
@@ -80,9 +88,9 @@ class Ventas_Restaurantes:
         print("Cédula del cliente: {}".format(cedula))
         print("Productos comprados:")
         for producto in productos:
-            print(" - {}: ${}".format(producto["name"], producto["price"]))
-        print("Subtotal: ${}".format(subtotal))  # Agregue esta línea
-        print("Descuento: ${}".format(descuento))  # Agregue esta línea
+            print(" - {}: ${}".format(producto.name, producto.price))
+        print("Subtotal: ${}".format(subtotal))
+        print("Descuento: ${}".format(descuento))
         print("Total: ${}".format(total))
             
     
@@ -91,10 +99,8 @@ class Ventas_Restaurantes:
         carrera_cliente = self.obtener_carrera_cliente(cedula)
         with open("datos/ventas_realizadas.txt", "a") as ventas_file:
             for producto in productos:
-                linea = f"{cedula},{producto['name']},{carrera_cliente},{producto['price']},{total}\n"
+                linea = f"{cedula},{producto.name},{carrera_cliente},{producto.price},{total}\n"
                 ventas_file.write(linea)
-
-
 
     def es_numero_perfecto(self, num):
         sum_divisores = 0
@@ -142,8 +148,7 @@ class Ventas_Restaurantes:
             compra = self.realizar_compra(cedula, productos)
             if compra:
                 subtotal, descuento, total = compra
-                self.mostrar_resumen_compra(cedula, productos, subtotal, descuento, total)
+                
 
         print("Gracias por utilizar nuestra aplicación. ¡Hasta pronto!")
-        
 

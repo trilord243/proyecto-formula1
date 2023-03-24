@@ -12,11 +12,11 @@ def main():
     while menu_principal:
         print("Bienvenido a todos! ")
         print("1. Gestionar carreras")
-        print("2.venta de entradas")
-        print("3.Gestion_asistencia ")
-        print("4.Gestion_Restaurantes")
+        print("2. Venta de entradas")
+        print("3. Gestion_asistencia ")
+        print("4. Gestion_Restaurantes")
         print("5. Ventas Restaurante")
-        print("6. Estadisticas")
+        print("6. Indicadores de gestion")
         opcion = input("Escoge una opcion: ")
         if opcion == "1":
             volver_al_menu_principal = Gestion_carrera().start()
