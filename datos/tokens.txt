@@ -1,6 +1,0 @@
-080b74bf-b917-4293-b10b-c55956e86e63,Felipe,26573457,Bahrain Grand Prix,vip,394.4,Asistirá
-fe0b97e2-8087-45f6-b629-56ff7f8c6cfc,Felipe,23423,Bahrain Grand Prix,general,174.0,Asistirá
-4ca96d02-430a-4776-a9b6-08e799d9d996,Felipe,123,Saudi Arabian Grand Prix,vip,197.2,No asistirá
-f682b3da-78a9-40cc-82f8-395fce9edb9c,Felipe ,2345,Saudi Arabian Grand Prix,general,87.0,No asistirá
-b0e4f232-1dd5-4fea-809c-d9e60dc27c72,Felipe,32,Bahrain Grand Prix,general,87.0,Asistirá
-0d16c678-6d40-4333-997a-40ba4cb6c35b,Felipe,45678,Abu Dhabi Grand Prix,vip,197.2,Asistirá
