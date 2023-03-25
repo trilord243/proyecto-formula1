@@ -38,26 +38,30 @@ class Gestion_Restaurante:
                     productos.append(product)
         return productos
     
-    #Me
-    def buscar(self, name=None, product_type=None, min_price=None, max_price=None):
+    #Metodo que busca filtra los productos por nombre,tipo,maximo y minimo
+    def buscar(self, name=None, tipo_product=None, minimo=None, maximo=None):
+        #Se guarda los productos 
         resultado = self.productos
-
-        if name or product_type or min_price is not None or max_price is not None:
+        #Si alguno de los resultados no es None que es su valor por defecto entonces busca el resultdado 
+        if name or tipo_product or minimo is not None or maximo is not None:
             if name:
+                #Filtra los productos por nombre
                 resultado = [p for p in resultado if name.lower() in p.name.lower()]
-            if product_type:
-                resultado = [p for p in resultado if product_type.lower() in p.product_type.lower()]
-            if min_price is not None:
-                resultado = [p for p in resultado if p.price >= min_price]
-            if max_price is not None:
-                resultado = [p for p in resultado if p.price <= max_price]
+            if tipo_product:
+                #Filtra los productos por tipo
+                resultado = [p for p in resultado if tipo_product.lower() in p.tipo_product.lower()]
+            if minimo is not None:
+                #Por minimo y su maximo 
+                resultado = [p for p in resultado if p.price >= minimo]
+            if maximo is not None:
+                resultado = [p for p in resultado if p.price <= maximo]
         else:
             print("Por favor, ingrese al menos un criterio de búsqueda.")
             return []
 
         return resultado
 
-
+    #Metodo qu muestra el menu de la aplicacion 
     def start(self):
         print('Bienvenido al sistema de gestión de restaurantes de carreras F1 VIP')
         menu_val=True
@@ -67,24 +71,25 @@ class Gestion_Restaurante:
             option = input('Seleccione una opción: ')
             if option == '1':
                 name = input('Ingrese el nombre del producto (opcional): ')
-                product_type = input('Ingrese el tipo de producto (opcional): ')
-                min_price = input('Ingrese el precio mínimo (opcional): ')
-                max_price = input('Ingrese el precio máximo (opcional): ')
-
+                tipo_product = input('Ingrese el tipo de producto (opcional): ')
+                minimo = input('Ingrese el precio mínimo (opcional): ')
+                maximo = input('Ingrese el precio máximo (opcional): ')
+                #Se valida si el maximo y el minimo sean numeros
                 try:
-                    if min_price:
-                        min_price = float(min_price)
-                    if max_price:
-                        max_price = float(max_price)
+                    if minimo:
+                        minimo = float(minimo)
+                    if maximo:
+                        maximo = float(maximo)
                 except ValueError:
                     print("Error: Por favor, ingrese un valor numérico válido para el precio mínimo y/o máximo.")
                     continue
-                
-                resultado = self.buscar(name, product_type, min_price, max_price)
-
+                #Se entrega el resultados filtrados 
+                resultado = self.buscar(name, tipo_product, minimo, maximo)
+                #Si el resultado no existe entonces se muestra un mensaje de error 
                 if not resultado:
                     print('No se encontraron productos que coincidan con los criterios de búsqueda.')
                 else:
+                    #Se muestra todos los resultados 
                     print('Resultados de la búsqueda:')
                     for product in resultado:
                         print(product)

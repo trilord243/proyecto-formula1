@@ -329,7 +329,6 @@ class Gestion_carrera:
             
             if int(partes[1])==mes:
                 
-                
                 print(f"""
                     Carrera: 
                     
@@ -347,7 +346,7 @@ class Gestion_carrera:
             
             
                 
-    
+    # Metodo que imprime los meses meses y regresa la opcion del usuario, tambien valida que el mes sea un numero
     def imprimir_meses(self):
         print("""
             \n Escoja el mes de la carrera que deseas imprimir:

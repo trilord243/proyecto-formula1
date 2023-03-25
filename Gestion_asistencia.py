@@ -41,7 +41,7 @@ class Gestion_Asistencia:
                 break
     #Metodo que actualiza el txt de tokes 
     def guardar_tokens(self):
-        #Se abre el txt de tokes 
+        #Se abre el txt de tokens.txt
         with open("datos/tokens.txt", "w") as archivo_tokens:
             #Por cada iteracion de self.tokens va a acutalizar los datos que el tenga si no tiene nuingun cambio entonces se dejara igual 
             for token in self.tokens:
