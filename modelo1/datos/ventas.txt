@@ -12,3 +12,6 @@ felioe,23423,24,Bahrain Grand Prix,general,174.0
 Felipe,456,45,Australian Grand Prix,vip,197.2
 Felipe,89,45,Saudi Arabian Grand Prix,general,87.0
 Felipe,154,4586,United States Grand Prix,vip,394.4
+Felipe,26573457,32,Mexico City Grand Prix,vip,394.4
+Felipoe,26573,12,Hungarian Grand Prix,general,174.0
+Felipe,4894,456,Las Vegas Grand Prix,general,174.0

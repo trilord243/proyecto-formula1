@@ -446,7 +446,7 @@ class Gestion_carrera:
         for i, piloto in enumerate(pilotos_seleccionados):
             piloto.agregar_puntos(puntos[i])
             piloto.guardar_datos()
-
+            
             # Encuentra y actualiza el constructor al que pertenece el piloto
             for constructor in self.constructores:
                 if piloto.id in constructor.pilotos_ref:
@@ -507,7 +507,7 @@ class Gestion_carrera:
                     print("No existe la carrera")
             else:
                 
-                print("Opción no válida. Regresando al menú principal.")
+                print("\nRegresando al menu principal... ")
                 menu_val = False
                 volver_al_menu_principal = True  
 

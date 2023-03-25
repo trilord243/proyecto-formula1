@@ -14,3 +14,6 @@ b4da7fff-8632-453e-b80d-07e0c8c06514,fe,4,Azerbaijan Grand Prix,general,87.0,Asi
 380115fc-a0c2-4ef6-b387-f754353b8c69,Felipe,456,Australian Grand Prix,vip,197.2,Asistirá
 dacdc8e1-1f7b-4d3e-ad8f-48bbf1dc9be3,Felipe,89,Saudi Arabian Grand Prix,general,87.0,Asistirá
 c2f4f5af-1496-4090-bf22-92854b4cb137,Felipe,154,United States Grand Prix,vip,394.4,Asistirá
+ad60bf40-e6e4-428d-bfa0-c96b942700bf,Felipe,26573457,Mexico City Grand Prix,vip,394.4,Asistirá
+0be120e8-0b15-4fdf-9078-1a9e42feda76,Felipoe,26573,Hungarian Grand Prix,general,174.0,Asistirá
+1509e5e7-a20b-4cca-b41d-93db4b3c15bf,Felipe,4894,Las Vegas Grand Prix,general,174.0,Asistirá
