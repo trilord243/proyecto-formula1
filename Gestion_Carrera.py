@@ -496,14 +496,16 @@ class Gestion_carrera:
                 mes=self.imprimir_meses()
                 self.buscar_carreras_por_mes(mes)
             elif opcion == "5":
-                carrera_numero = input("Ingrese el número de la carrera a finalizar: ")
-                while not carrera_numero.isdigit() :
-                    carrera_numero=input("Ingrese un valor numerico numero de carrera")
-                data=int(carrera_numero)
-                if not data > len(self.carreras):
-                    self.finalizar_carrera(data)
-                else:
-                    print("No existe la carrera")
+                carrera_numero = None
+                entrada_valida = False
+                while not entrada_valida:
+                    carrera_numero = input("Ingrese el número de la carrera a finalizar: ")
+                    if carrera_numero.isdigit() and 1 <= int(carrera_numero) <= len(self.carreras):
+                        entrada_valida = True
+                    else:
+                        print(f"Por favor, ingrese un número de carrera válido (1-{len(self.carreras)}).")
+
+                self.finalizar_carrera(int(carrera_numero))
             else:
                 
                 print("\nRegresando al menu principal... ")
