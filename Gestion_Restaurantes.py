@@ -49,7 +49,7 @@ class Gestion_Restaurante:
                 resultado = [p for p in resultado if name.lower() in p.name.lower()]
             if tipo_product:
                 #Filtra los productos por tipo
-                resultado = [p for p in resultado if tipo_product.lower() in p.tipo_product.lower()]
+                resultado = [p for p in resultado if tipo_product.lower() in p.product_type.lower()] # Modificado aquí
             if minimo is not None:
                 #Por minimo y su maximo 
                 resultado = [p for p in resultado if p.price >= minimo]
@@ -74,18 +74,26 @@ class Gestion_Restaurante:
                 tipo_product = input('Ingrese el tipo de producto (opcional): ')
                 minimo = input('Ingrese el precio mínimo (opcional): ')
                 maximo = input('Ingrese el precio máximo (opcional): ')
-                #Se valida si el maximo y el minimo sean numeros
+
+                
+                name = name if name else None
+                tipo_product = tipo_product if tipo_product else None
+
+                # valida  en que el usuario ingrese un valor no numérico
                 try:
-                    if minimo:
-                        minimo = float(minimo)
-                    if maximo:
-                        maximo = float(maximo)
+                    minimo = float(minimo) if minimo else None
                 except ValueError:
-                    print("Error: Por favor, ingrese un valor numérico válido para el precio mínimo y/o máximo.")
+                    print("Error: Por favor, ingrese un valor numérico válido para el precio mínimo.")
                     continue
-                #Se entrega el resultados filtrados 
+
+                try:
+                    maximo = float(maximo) if maximo else None
+                except ValueError:
+                    print("Error: Por favor, ingrese un valor numérico válido para el precio máximo.")
+                    continue
+
                 resultado = self.buscar(name, tipo_product, minimo, maximo)
-                #Si el resultado no existe entonces se muestra un mensaje de error 
+
                 if not resultado:
                     print('No se encontraron productos que coincidan con los criterios de búsqueda.')
                 else:
@@ -93,7 +101,7 @@ class Gestion_Restaurante:
                     print('Resultados de la búsqueda:')
                     for product in resultado:
                         print(product)
-                        
+
             elif option == '2':
                 print('Gracias por usar el sistema de gestión de restaurantes de carreras F1 VIP')
                 menu_val=False
